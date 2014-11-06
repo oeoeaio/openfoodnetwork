@@ -1,17 +1,28 @@
 @import branding
 @import mixins
+@import animations
 
 dialog, .reveal-modal
+  @include csstrans
   border: none
   outline: none
-  padding: 30px 20px 0 20px 
+  padding: 30px 30px 0 30px
   border-bottom: 30px solid white
+  z-index: 9999
   overflow-y: scroll
   overflow-x: hidden
-  // Not working yet - want a nice gradient shadow when there is overflow - needs JS too
-  // &:after
-  //   @include elipse-shadow(0 0 40px rgba(0, 0, 0, 0.8))
+  -webkit-transition: all 2500ms ease-in-out
+  -moz-transition: all 2500ms ease-in-out
+  -ms-transition: all 2500ms ease-in-out
+  -o-transition: all 2500ms ease-in-out
+  transition: all 2500ms ease-in-out
+  position: relative
 
+  &.has-scroll
+    background-image: url("/assets/modal-shadow.png")
+    background-position: center bottom
+    background-repeat: no-repeat
+    background-size: 94% auto
 
   // Reveal.js break point:
   // @media only screen and (max-width: 40.063em)
