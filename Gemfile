@@ -6,13 +6,14 @@ gem 'rails-i18n', '~> 3.0.0'
 gem 'i18n', '~> 0.6.11'
 
 gem 'pg'
-gem 'spree', :github => 'openfoodfoundation/spree', :branch => '1-3-stable'
-gem 'spree_i18n', :github => 'spree/spree_i18n', :branch => '1-3-stable'
-gem 'spree_auth_devise', :github => 'spree/spree_auth_devise', :branch => '1-3-stable'
+#gem 'spree', :github => 'openfoodfoundation/spree', :branch => '1-3-stable'
+gem 'spree', :github => 'spree/spree', :branch => '2-0-stable'
+gem 'spree_i18n', :github => 'spree/spree_i18n', :branch => '2-0-stable'
+gem 'spree_auth_devise', :github => 'spree/spree_auth_devise', :branch => '2-0-stable'
 
 # Waiting on merge of PR #117
 # https://github.com/spree-contrib/better_spree_paypal_express/pull/117
-gem 'spree_paypal_express', :github => "openfoodfoundation/better_spree_paypal_express", :branch => "1-3-stable"
+gem 'spree_paypal_express', :github => "openfoodfoundation/better_spree_paypal_express", :branch => '2-0-stable'
 #gem 'spree_paypal_express', :github => "spree-contrib/better_spree_paypal_express", :branch => "1-3-stable"
 
 gem 'delayed_job_active_record'
@@ -31,16 +32,16 @@ gem 'haml'
 gem 'sass', "~> 3.3"
 gem 'sass-rails', '~> 3.2.3', groups: [:default, :assets]
 gem 'redcarpet'
-gem 'aws-sdk'
+gem 'aws-sdk', "~> 1.31.3"
 gem 'db2fog'
 gem 'andand'
-gem 'truncate_html'
+gem 'truncate_html', '~> 0.9.2'
 gem 'representative_view'
-gem 'rabl'
+gem 'rabl', "0.9.3"
 gem "active_model_serializers"
 gem 'oj'
-gem 'deface', :github => 'spree/deface', :ref => '1110a13'
-gem 'paperclip'
+gem 'deface', '~> 1.0.0'
+gem 'paperclip', '~> 3.4.1'
 gem 'dalli'
 gem 'geocoder'
 gem 'gmaps4rails'
@@ -52,7 +53,7 @@ gem 'roadie-rails', '~> 1.0.3'
 gem 'figaro'
 gem 'blockenspiel'
 gem 'acts-as-taggable-on', '~> 3.4'
-gem 'paper_trail', '~> 3.0.8'
+gem 'paper_trail', '~> 2' #'~> 3.0.8'
 
 gem 'foreigner'
 gem 'immigrant'
@@ -79,8 +80,9 @@ end
 gem "foundation-rails"
 gem 'foundation_rails_helper', github: 'willrjmarshall/foundation_rails_helper', branch: "rails3"
 
-gem 'jquery-rails'
+gem 'jquery-rails', '~> 3.0.0'
 gem 'css_splitter'
+
 
 
 group :test, :development do
