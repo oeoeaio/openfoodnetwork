@@ -35,27 +35,6 @@ module Spree
       ShippingMethod.by_name.should == [sm2, sm3, sm1]
     end
 
-
-    describe "availability" do
-      let(:sm) { build(:shipping_method) }
-
-      it "is available to orders that match its distributor" do
-        o = build(:order, ship_address: build(:address), distributor: sm.distributors.first)
-        sm.should be_available_to_order o
-      end
-
-      it "is not available to orders that do not match its distributor" do
-        o = build(:order, ship_address: build(:address),
-                  distributor: build(:distributor_enterprise))
-        sm.should_not be_available_to_order o
-      end
-
-      it "is available to orders with no shipping address" do
-        o = build(:order, ship_address: nil, distributor: sm.distributors.first)
-        sm.should be_available_to_order o
-      end
-    end
-
     describe "finding services offered by all distributors" do
       let!(:d1) { create(:distributor_enterprise) }
       let!(:d2) { create(:distributor_enterprise) }
