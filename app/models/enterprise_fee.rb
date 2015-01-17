@@ -1,4 +1,5 @@
 class EnterpriseFee < ActiveRecord::Base
+  include Spree::Core::CalculatedAdjustments
   belongs_to :enterprise
   belongs_to :tax_category, class_name: 'Spree::TaxCategory', foreign_key: 'tax_category_id'
   has_and_belongs_to_many :order_cycles, join_table: 'coordinator_fees'
@@ -6,8 +7,6 @@ class EnterpriseFee < ActiveRecord::Base
   has_many :exchanges, through: :exchange_fees
 
   before_destroy { order_cycles.clear }
-
-  calculated_adjustments
 
   attr_accessible :enterprise_id, :fee_type, :name, :tax_category_id, :calculator_type
 
