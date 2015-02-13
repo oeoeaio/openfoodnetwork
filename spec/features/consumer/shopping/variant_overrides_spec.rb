@@ -13,9 +13,9 @@ feature "shopping with variant overrides defined", js: true do
   let(:outgoing_exchange) { oc.exchanges.outgoing.first }
   let(:sm) { hub.shipping_methods.first }
   let(:pm) { hub.payment_methods.first }
-  let(:p1) { create(:simple_product, supplier: producer) }
-  let(:p2) { create(:simple_product, supplier: producer) }
-  let(:p3) { create(:simple_product, supplier: producer, on_demand: true) }
+  let(:p1) { create(:product, supplier: producer) }
+  let(:p2) { create(:product, supplier: producer) }
+  let(:p3) { create(:product, supplier: producer, on_demand: true) }
   let(:v1) { create(:variant, product: p1, price: 11.11, unit_value: 1) }
   let(:v2) { create(:variant, product: p1, price: 22.22, unit_value: 2) }
   let(:v3) { create(:variant, product: p2, price: 33.33, unit_value: 3) }

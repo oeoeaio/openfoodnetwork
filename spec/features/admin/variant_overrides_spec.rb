@@ -37,18 +37,16 @@ feature %q{
     end
 
     context "when a hub is selected" do
-      let!(:product) { create(:simple_product, supplier: producer, variant_unit: 'weight', variant_unit_scale: 1) }
+      let!(:product) { create(:product, supplier: producer, variant_unit: 'weight', variant_unit_scale: 1) }
       let!(:variant) { create(:variant, product: product, unit_value: 1, price: 1.23, on_hand: 12) }
-
       let!(:producer_related) { create(:supplier_enterprise) }
-      let!(:product_related) { create(:simple_product, supplier: producer_related) }
+      let!(:product_related) { create(:product, supplier: producer_related) }
       let!(:variant_related) { create(:variant, product: product_related, unit_value: 2, price: 2.34, on_hand: 23) }
       let!(:er2) { create(:enterprise_relationship, parent: producer_related, child: hub,
                           permissions_list: [:create_variant_overrides]) }
 
       let!(:producer_unrelated) { create(:supplier_enterprise) }
-      let!(:product_unrelated) { create(:simple_product, supplier: producer_unrelated) }
-
+      let!(:product_unrelated) { create(:product, supplier: producer_unrelated) }
 
       before do
         # Remove 'S' option value

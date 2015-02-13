@@ -177,9 +177,8 @@ FactoryGirl.define do
     order_cycle { create(:simple_order_cycle) }
 
     after(:create) do |order|
-      p = create(:simple_product, :distributors => [order.distributor])
-      FactoryGirl.create(:liend
-ne_item, :order => order, :product => p)
+      p = create(:product, :distributors => [order.distributor])
+      FactoryGirl.create(:line_item, :order => order, :product => p)
       order.reload
     end
   end
@@ -236,13 +235,18 @@ ne_item, :order => order, :product => p)
     year { 2000 + rand(100) }
     month { 1 + rand(12) }
   end
+end
 
-  # This factory was removed in Spree 2.0, so we copied the original across from the Spree 1.3 codebase
-  # TODO: Should we ditch this and just use the stardard :product factory?
-  factory :simple_product, :parent => :base_product do
-    if Spree::Config[:track_inventory_levels]
-      on_hand 5
-    end
+FactoryGirl.modify do
+  factory :base_product do
+    unit_value 1
+    unit_description ''
+  end
+
+  factory :product do
+    # if Spree::Config[:track_inventory_levels]
+    #   on_hand 5
+    # end
 
     # Fix product factory name sequence with Kernel.rand so it is not interpreted as a Spree::Product method
     # Pull request: https://github.com/spree/spree/pull/1964
@@ -256,17 +260,7 @@ ne_item, :order => order, :product => p)
     variant_unit 'weight'
     variant_unit_scale 1
     variant_unit_name ''
-  end
-end
 
-
-FactoryGirl.modify do
-  factory :base_product do
-    unit_value 1
-    unit_description ''
-  end
-
-  factory :product do
     primary_taxon { Spree::Taxon.first || FactoryGirl.create(:taxon) }
   end
 

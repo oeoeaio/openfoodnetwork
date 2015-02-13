@@ -165,8 +165,8 @@ module OpenFoodNetwork
     end
 
     describe "finding editable products" do
-      let!(:p1) { create(:simple_product, supplier: create(:supplier_enterprise) ) }
-      let!(:p2) { create(:simple_product, supplier: create(:supplier_enterprise) ) }
+      let!(:p1) { create(:product, supplier: create(:supplier_enterprise) ) }
+      let!(:p2) { create(:product, supplier: create(:supplier_enterprise) ) }
 
       before do
         permissions.stub(:managed_enterprise_products) { Spree::Product.where('1=0') }
@@ -186,9 +186,9 @@ module OpenFoodNetwork
     end
 
     describe "finding visible products" do
-      let!(:p1) { create(:simple_product, supplier: create(:supplier_enterprise) ) }
-      let!(:p2) { create(:simple_product, supplier: create(:supplier_enterprise) ) }
-      let!(:p3) { create(:simple_product, supplier: create(:supplier_enterprise) ) }
+      let!(:p1) { create(:product, supplier: create(:supplier_enterprise) ) }
+      let!(:p2) { create(:product, supplier: create(:supplier_enterprise) ) }
+      let!(:p3) { create(:product, supplier: create(:supplier_enterprise) ) }
 
       before do
         permissions.stub(:managed_enterprise_products) { Spree::Product.where("1=0") }

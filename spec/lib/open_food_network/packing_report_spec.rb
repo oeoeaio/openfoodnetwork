@@ -34,7 +34,7 @@ module OpenFoodNetwork
 
       describe "fetching orders" do
         let(:supplier) { create(:supplier_enterprise) }
-        let(:product) { create(:simple_product, supplier: supplier) }
+        let(:product) { create(:product, supplier: supplier) }
         let(:d1) { create(:distributor_enterprise) }
         let(:oc1) { create(:simple_order_cycle) }
         let(:order) { create(:order, completed_at: 1.day.ago, order_cycle: oc1, distributor: d1) }
@@ -64,7 +64,7 @@ module OpenFoodNetwork
           d2.enterprise_roles.create!(user: create(:user))
 
           s2 = create(:supplier_enterprise)
-          p2 = create(:simple_product, supplier: s2)
+          p2 = create(:product, supplier: s2)
 
           li1 = create(:line_item, product: product)
           li2 = create(:line_item, product: p2)

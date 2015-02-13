@@ -19,7 +19,7 @@ scenario "order cycle expires mid-order" do
   d = create(:distributor_enterprise,
              name: 'Green Grass', email: 'd@example.com', phone: '1029 3847')
   create_enterprise_group_for d
-  p = create(:simple_product)
+  p = create(:product)
   oc = create(:simple_order_cycle, name: 'oc', distributors: [d], variants: [p.master])
 
   # When I select an order cycle and add a product to my cart
@@ -40,4 +40,3 @@ scenario "order cycle expires mid-order" do
     page.should have_content d.phone
   end
 end
-

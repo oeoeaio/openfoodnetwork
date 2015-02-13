@@ -9,7 +9,7 @@ feature %q{
   let!(:producer) { create(:supplier_enterprise) }
   let!(:invisible_producer) { create(:supplier_enterprise, visible: false) }
   let(:taxon) { create(:taxon) }
-  let!(:product) { create(:simple_product, supplier: producer, taxons: [taxon]) }
+  let!(:product) { create(:product, supplier: producer, taxons: [taxon]) }
   let(:shop) { create(:distributor_enterprise) }
   let!(:er) { create(:enterprise_relationship, parent: shop, child: producer) }
 
