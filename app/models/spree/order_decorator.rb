@@ -11,6 +11,7 @@ Spree::Order.class_eval do
   belongs_to :distributor, :class_name => 'Enterprise'
   belongs_to :cart
   belongs_to :customer
+  has_many :shipping_methods, through: :shipments
 
   validates :customer, presence: true, if: :require_customer?
   validate :products_available_from_new_distribution, :if => lambda { distributor_id_changed? || order_cycle_id_changed? }
@@ -242,6 +243,10 @@ Spree::Order.class_eval do
     unless distributor_id == Spree::Config.accounts_distributor_id
       Delayed::Job.enqueue ConfirmOrderJob.new(id)
     end
+  end
+
+  def shipping_method_names
+    shipping_methods.pluck :name
   end
 
 

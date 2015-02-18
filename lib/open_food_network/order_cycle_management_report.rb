@@ -21,7 +21,7 @@ module OpenFoodNetwork
         orders.map { |o| payment_method_row o }
       else
         orders.map { |o| delivery_row o }
-      end     
+      end
     end
 
     def orders
@@ -33,7 +33,7 @@ module OpenFoodNetwork
     end
 
 
-    private 
+    private
 
     def payment_method_row(order)
       ba = order.billing_address
@@ -44,7 +44,7 @@ module OpenFoodNetwork
        customer_code(order.email),
        order.email,
        ba.phone,
-       order.shipping_method.andand.name,
+       order.shipping_method_names,
        order.payments.first.andand.payment_method.andand.name,
        order.payments.first.amount,
        OpenFoodNetwork::UserBalanceCalculator.new(order.user, order.distributor).balance
@@ -80,7 +80,7 @@ module OpenFoodNetwork
 
     def filter_to_shipping_method(orders)
       if params[:shipping_method_name].present?
-        orders.joins(:shipping_method).where("spree_shipping_methods.name = ?", params[:shipping_method_name])
+        orders.joins(:shipping_methods).where("spree_shipping_methods.name = ?", params[:shipping_method_name])
       else
         orders
       end
