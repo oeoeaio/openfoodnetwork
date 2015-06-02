@@ -1,0 +1,14 @@
+label {
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: 90%;
+  display: inline;
+  margin-bottom: 5px;
+  color: #6788a2;
+}
+
+table thead th.actions, table thead td.actions {
+  background-color: transparent;
+  border: none !important;
+  text-align: center;
+}

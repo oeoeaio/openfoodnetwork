@@ -1,0 +1,73 @@
+%html
+  %head
+    %meta{charset: 'utf-8'}/
+    %meta{name: 'viewport', content: "width=device-width,initial-scale=1.0"}/
+
+    %title= content_for?(:title) ? yield(:title) : "Spree #{t('administration')}: #{t(controller.controller_name, :default => controller.controller_name.titleize)}"
+    - if Rails.env.production?
+      = favicon_link_tag
+    - else
+      = favicon_link_tag "/favicon-staging.ico"
+    %link{href: "https://fonts.googleapis.com/css?family=Open+Sans:400,700", rel: "stylesheet", type: "text/css"}/
+
+    = yield :scripts
+    = stylesheet_link_tag "backend/all"
+    = javascript_include_tag "backend/all"
+
+
+    = render "layouts/bugherd_script"
+    = csrf_meta_tags
+
+  %body
+    %nav.top-bar{"data-topbar" => "", :role => "navigation"}
+      %ul.title-area
+        %li.name
+          %h1
+            %a{:href => "#"} OpenFoodNetwork
+        / Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone
+        %li.toggle-topbar.menu-icon
+          %a{:href => "#"}
+            %span
+      %section.top-bar-section
+        %ul.right
+          %li{"data-hook" => "user-logged-in-as"}
+            = "#{t(:logged_in_as)}: #{spree_current_user.email}"
+          %li{"data-hook" => "user-account-link"}
+            %a{ href: account_path }
+              %i.icon-user
+              =t(:account)
+          %li{"data-hook" => "user-logout-link"}
+            %a{ href: spree.logout_path }
+              %i.icon-signout
+              =t(:logout)
+          %li{"data-hook" => "store-frontend-link"}
+            %a{ href: spree.root_path, :target => '_blank'}
+              %i.icon-external-link
+              =t(:store)
+        %ul.right.show-for-small-only
+
+
+    .row
+      .show-for-large-up.large-2.columns
+        = render 'layouts/admin/navigation'
+      .small-12.large-10.columns
+        .row
+          - columns_class = content_for?(:sidebar) ? 'large-9 columns' : 'large-11 columns'
+          %div{class: columns_class}
+            - if content_for?(:table_filter)
+              .row#table-filter
+                .small-12.columns
+                  %fieldset
+                    %legend{:align => "center"}= yield :table_filter_title
+                    = yield :table_filter
+            .row
+              .small-12.columns
+                = yield
+          - if content_for?(:sidebar)
+            %aside#sidebar.small-2.columns{"data-hook" => ""}
+              - if content_for?(:sidebar_title)
+                %h5.sidebar-title
+                  %span= yield :sidebar_title
+              = yield :sidebar
+          .show-for-large-up.large-1.column
+            &nbsp;

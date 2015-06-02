@@ -1,0 +1,38 @@
+%ul.side-nav
+  = menu_item :dashboard, :route => :admin, :icon => 'icon-dashboard'
+
+  = menu_group :orders, :icon => 'icon-shopping-cart' do
+    = menu_item :orders, label: "All"
+    = menu_item :bulk_order_management, label: "Bulk Management", :match_path => '/orders/bulk_management'
+
+  = menu_group :products, :icon => 'icon-th-large' do
+    = menu_item :products, url: bulk_edit_admin_products_path, :match_path => '/products'
+    = menu_item :variant_overrides, label: "Overrides", url: main_app.admin_variant_overrides_path, match_path: '/variant_overrides'
+
+  = menu_item :reports, :icon => 'icon-file'
+
+  = menu_group :enterprises, :icon => 'icon-map-marker' do
+    = menu_item :enterprises, url: main_app.admin_enterprises_path
+    = menu_item :relationships, url: main_app.admin_enterprise_relationships_path, match_path: '/enterprise_relationships'
+
+  = menu_item :order_cycles, icon: 'icon-repeat', :url => main_app.admin_order_cycles_path
+
+
+  = menu_group :users, icon: 'icon-user' do
+    = menu_item :users, url: spree.admin_users_path
+    = menu_item :roles, url: main_app.admin_enterprise_roles_path, match_path: '/enterprise_roles'
+
+  = menu_group :configurations, label: 'configuration', icon: 'icon-wrench', url: edit_admin_general_settings_path do
+    = menu_item :general_settings
+    = menu_item :mail_methods
+    -# :mail_methods, :tax_categories, :zones, :states, :payment_methods, :inventory_settings, :taxonomies, :shipping_methods, :trackers,  %>
+
+:coffee
+  $('.side-nav li.menu_group>a').click (e) ->
+    e.preventDefault();
+    if $(this).parent().hasClass("expanded")
+      $(this).parent().removeClass("expanded")
+      $(this).siblings('ul').slideUp(150, 'easeInOutCubic')
+    else
+      $(this).parent().addClass("expanded")
+      $(this).siblings('ul').slideDown(150, 'easeInOutCubic')

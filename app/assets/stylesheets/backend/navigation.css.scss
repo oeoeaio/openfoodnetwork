@@ -1,0 +1,48 @@
+.side-nav {
+
+  li [class^="icon-"], li [class*=" icon-"]{
+    text-align: left;
+  }
+
+  li {
+    list-style-type: none;
+
+    &.menu_item {
+      &>a::before {
+        font-size: 1.2rem;
+      }
+    }
+
+    &.menu_group {
+      &>a::after {
+        float: right;
+        margin: 3px 3px 0px 0px;
+        font-family: FontAwesome;
+        font-weight: normal;
+        font-style: normal;
+        display: inline-block;
+        text-decoration: inherit;
+        content: "\f078";
+      }
+      &>a::before {
+        font-size: 1.2rem;
+      }
+      ul {
+        display: none;
+      }
+
+      &.expanded {
+        &>a::after {
+          content: "\f077";
+        }
+        // ul {
+        //   display: block;
+        // }
+      }
+
+      &> a {
+        margin: 0 0 0.4375rem 0
+      }
+    }
+  }
+}
