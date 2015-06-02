@@ -1,0 +1,6 @@
+// Allows the use of rem-calc() or lower-bound() in your settings
+@import "foundation/functions";
+
+$row-width: rem-calc(3000);
+
+@import 'foundation';
