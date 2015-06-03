@@ -19,40 +19,44 @@
     = csrf_meta_tags
 
   %body
-    %nav.top-bar{"data-topbar" => "", :role => "navigation"}
-      %ul.title-area
-        %li.name
-          %h1
-            %a{:href => "#"} OpenFoodNetwork
-        / Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone
-        %li.toggle-topbar.menu-icon
-          %a{:href => "#"}
-            %span
-      %section.top-bar-section
-        %ul.right
-          %li{"data-hook" => "user-logged-in-as"}
-            = "#{t(:logged_in_as)}: #{spree_current_user.email}"
-          %li{"data-hook" => "user-account-link"}
-            %a{ href: account_path }
-              %i.icon-user
-              =t(:account)
-          %li{"data-hook" => "user-logout-link"}
-            %a{ href: spree.logout_path }
-              %i.icon-signout
-              =t(:logout)
-          %li{"data-hook" => "store-frontend-link"}
-            %a{ href: spree.root_path, :target => '_blank'}
-              %i.icon-external-link
-              =t(:store)
-        %ul.right.show-for-small-only
+    .fixed
+      %nav.top-bar{"data-topbar" => "", :role => "navigation"}
+        %ul.title-area
+          %li.name
+            = link_to image_tag(Spree::Config[:admin_interface_logo], :id => 'logo'), spree.admin_path
+            -# %h1
+            -#   %a{:href => "#"} OpenFoodNetwork
+          / Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone
+          %li.toggle-topbar.menu-icon
+            %a{:href => "#"}
+              %span
+        %section.top-bar-section
+          %ul.right
+            %li{"data-hook" => "user-logged-in-as"}
+              = "#{t(:logged_in_as)}: #{spree_current_user.email}"
+            %li{"data-hook" => "user-account-link"}
+              %a{ href: account_path }
+                %i.icon-user
+                =t(:account)
+            %li{"data-hook" => "user-logout-link"}
+              %a{ href: spree.logout_path }
+                %i.icon-signout
+                =t(:logout)
+            %li{"data-hook" => "store-frontend-link"}
+              %a{ href: spree.root_path, :target => '_blank'}
+                %i.icon-external-link
+                =t(:store)
+          %ul.right.show-for-small-only
 
+    #wrap
 
-    .row
-      .show-for-large-up.large-2.columns
-        = render 'layouts/admin/navigation'
-      .small-12.large-10.columns
+      = render 'layouts/admin/navigation'
+
+      = render 'layouts/admin/mini_navigation'
+
+      #main
         .row
-          - columns_class = content_for?(:sidebar) ? 'large-9 columns' : 'large-11 columns'
+          - columns_class = content_for?(:sidebar) ? 'large-10 columns' : 'large-12 columns'
           %div{class: columns_class}
             - if content_for?(:table_filter)
               .row#table-filter
@@ -69,5 +73,5 @@
                 %h5.sidebar-title
                   %span= yield :sidebar_title
               = yield :sidebar
-          .show-for-large-up.large-1.column
-            &nbsp;
+          -# .show-for-large-up.large-1.column
+          -#   &nbsp;

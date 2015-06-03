@@ -61,5 +61,10 @@ module Admin
       end
       content_tag('li', link, :class => css_classes.join(' '))
     end
+
+
+    def menu_icon(icon)
+      content_tag 'li', link_to('', '#', class: icon)
+    end
   end
 end

@@ -1,4 +1,5 @@
-%ul.side-nav
+%ul.side-nav#full-nav
+  %li.minifier= link_to "Hide Menu", "#", class: 'icon_link icon-chevron-left'
   = menu_item :dashboard, :route => :admin, :icon => 'icon-dashboard'
 
   = menu_group :orders, :icon => 'icon-shopping-cart' do
@@ -36,3 +37,6 @@
     else
       $(this).parent().addClass("expanded")
       $(this).siblings('ul').slideDown(150, 'easeInOutCubic')
+  $('.side-nav li.minifier>a').click (e) ->
+    e.preventDefault()
+    $('#wrap').toggleClass('minified-nav')
