@@ -1,5 +1,7 @@
 %ul.side-nav#full-nav
-  %li.minifier= link_to "Hide Menu", "#", class: 'icon_link icon-chevron-left'
+  %li.menu_item.minifier
+    = link_to '', "#", class: 'minified icon_link icon-chevron-right'
+    = link_to "Hide Menu", "#", class: 'icon_link icon-chevron-left'
   = menu_item :dashboard, :route => :admin, :icon => 'icon-dashboard'
 
   = menu_group :orders, :icon => 'icon-shopping-cart' do
@@ -29,7 +31,7 @@
     -# :mail_methods, :tax_categories, :zones, :states, :payment_methods, :inventory_settings, :taxonomies, :shipping_methods, :trackers,  %>
 
 :coffee
-  $('.side-nav li.menu_group>a').click (e) ->
+  $('#full-nav li.menu_group>a').click (e) ->
     e.preventDefault();
     if $(this).parent().hasClass("expanded")
       $(this).parent().removeClass("expanded")
@@ -37,6 +39,10 @@
     else
       $(this).parent().addClass("expanded")
       $(this).siblings('ul').slideDown(150, 'easeInOutCubic')
-  $('.side-nav li.minifier>a').click (e) ->
+  $('#full-nav li.minifier>a:not(.minified)').click (e) ->
+    e.preventDefault()
+    $(this).parent().siblings('.menu_group').removeClass("expanded").children('ul').hide()
+    $('#wrap').toggleClass('minified-nav')
+  $('#full-nav li>a.minified').click (e) ->
     e.preventDefault()
     $('#wrap').toggleClass('minified-nav')

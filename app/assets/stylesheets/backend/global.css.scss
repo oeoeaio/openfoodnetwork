@@ -17,28 +17,6 @@ $main-horizontal-padding: 5rem;
     width: $full-nav-width;
   }
 
-  #mini-nav {
-    position: fixed;
-    left: 0;
-    top: 0;
-    padding-top: $top-bar-height;
-    background-color: #fafafa;
-    z-index: 50;
-    height: 100vh;
-    overflow-y: scroll;
-    display: none;
-    width: $mini-nav-width;
-
-    li {
-      list-style-type: none;
-
-      &>a::before {
-        font-size: 1.2rem;
-        margin: none;
-      }
-    }
-  }
-
   #main {
     margin-left: $full-nav-width;
     margin-top: $top-bar-height;
@@ -48,11 +26,16 @@ $main-horizontal-padding: 5rem;
 
   &.minified-nav {
     #full-nav {
-      display: none;
-    }
+      width: $mini-nav-width;
 
-    #mini-nav {
-      display: block;
+      li.menu_group, li.menu_item {
+        &>a {
+          display: none;
+          &.minified {
+            display: block;
+          }
+        }
+      }
     }
 
     #main {

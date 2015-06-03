@@ -17,12 +17,13 @@ module Admin
 
       if options[:icon]
         title = link_to titleized_label, "#", class: "icon_link #{options[:icon]}"
+        mini = link_to '', '#', class: "minified icon_link #{options[:icon]}"
       else
         title = link_to titleized_label, "#"
       end
 
       content_tag 'li', class: "menu_group" do
-        title + content_tag(:ul) { menu_items }
+        mini + title + content_tag(:ul) { menu_items }
       end
     end
 
@@ -45,6 +46,7 @@ module Admin
 
       if options[:icon]
         link = link_to_with_icon(options[:icon], titleized_label, destination_url)
+        mini = link_to '', '#', class: "minified icon_link #{options[:icon]}"
       else
         link = link_to(titleized_label, destination_url)
       end
@@ -59,7 +61,14 @@ module Admin
       if options[:css_class]
         css_classes << options[:css_class]
       end
-      content_tag('li', link, :class => css_classes.join(' '))
+
+      content_tag 'li', :class => css_classes.join(' ') do
+        if mini
+          mini + link
+        else
+          link
+        end
+      end
     end
 
 

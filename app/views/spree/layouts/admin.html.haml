@@ -52,8 +52,6 @@
 
       = render 'layouts/admin/navigation'
 
-      = render 'layouts/admin/mini_navigation'
-
       #main
         .row
           - columns_class = content_for?(:sidebar) ? 'large-10 columns' : 'large-12 columns'
@@ -73,5 +71,3 @@
                 %h5.sidebar-title
                   %span= yield :sidebar_title
               = yield :sidebar
-          -# .show-for-large-up.large-1.column
-          -#   &nbsp;
