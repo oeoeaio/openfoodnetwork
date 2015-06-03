@@ -18,8 +18,9 @@
     = menu_item :enterprises, url: main_app.admin_enterprises_path
     = menu_item :relationships, url: main_app.admin_enterprise_relationships_path, match_path: '/enterprise_relationships'
 
-  = menu_item :order_cycles, icon: 'icon-repeat', :url => main_app.admin_order_cycles_path
+  = menu_item :enterprise_groups, label: 'groups', icon: 'icon-group', :url => main_app.admin_enterprise_groups_path
 
+  = menu_item :order_cycles, icon: 'icon-repeat', :url => main_app.admin_order_cycles_path
 
   = menu_group :users, icon: 'icon-user' do
     = menu_item :users, url: spree.admin_users_path
