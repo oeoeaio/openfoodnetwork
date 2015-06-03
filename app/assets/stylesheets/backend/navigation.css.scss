@@ -11,6 +11,7 @@
 
       &::before {
         font-size: 1.2rem;
+        width: 2rem;
       }
     }
 
@@ -27,6 +28,9 @@
       }
       ul {
         display: none;
+        .menu_item {
+          padding-left: 1rem;
+        }
       }
 
       &.expanded {
