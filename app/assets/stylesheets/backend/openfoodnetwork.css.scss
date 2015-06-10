@@ -195,11 +195,13 @@ table#listing_enterprise_groups {
 	}
 
 	.menu {
+    z-index: 100;
+    width: 200%;
 		margin-top: 1px;
 		position: absolute;
 		float: none;
 		top:100%;
-		left: 0px;
+		right: 0px;
 		padding: 5px 0px;
 		border: 1px solid #adadad;
 		background-color: #ffffff;
