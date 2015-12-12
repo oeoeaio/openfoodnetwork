@@ -61,7 +61,7 @@ module OpenFoodNetwork
        "#{ba.address1} #{ba.address2} #{ba.city}",
        ba.zipcode,
        ba.phone,
-       order.shipping_method.andand.name,
+       order.shipping_method_names,
        order.payments.first.andand.payment_method.andand.name,
        order.payments.first.amount,
        OpenFoodNetwork::UserBalanceCalculator.new(order.user, order.distributor).balance,

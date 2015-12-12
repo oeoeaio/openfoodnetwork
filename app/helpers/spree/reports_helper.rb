@@ -15,7 +15,7 @@ module Spree
     end
 
     def report_shipping_method_options(orders)
-      orders.map { |o| o.shipping_method.andand.name  }.uniq
+      orders.map { |o| o.shipping_methods.map(&:name)  }.uniq
     end
 
     def currency_symbol

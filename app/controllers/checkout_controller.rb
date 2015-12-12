@@ -106,10 +106,10 @@ class CheckoutController < Spree::CheckoutController
     end
   end
 
-  # When we have a pickup Shipping Method, we clone the distributor address into ship_address before_save
+  # When we don't have any delivery Shipping Methods, we clone the distributor address into ship_address before_save
   # We don't want this data in the form, so we clear it out
   def clear_ship_address
-    unless current_order.shipping_method.andand.require_ship_address
+    unless current_order.shipping_methods.map(&:require_ship_address).any?
       current_order.ship_address = Spree::Address.default
     end
   end

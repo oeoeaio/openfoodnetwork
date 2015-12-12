@@ -13,7 +13,9 @@ require 'rspec/rails'
 require 'capybara'
 require 'database_cleaner'
 require 'rspec/retry'
-require 'paper_trail/frameworks/rspec'
+
+# TODO: Uncomment this line as soon as we upgrade to spree 2.1 (and can thereby upgrade to paper_trail 3.x)
+# require 'paper_trail/frameworks/rspec'
 
 # Allow connections to phantomjs/selenium whilst raising errors
 # when connecting to external sites

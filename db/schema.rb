@@ -43,8 +43,8 @@ ActiveRecord::Schema.define(:version => 20150916061809) do
     t.datetime "begins_at"
     t.datetime "ends_at"
     t.string   "sells"
-    t.boolean  "trial",         :default => false
-    t.decimal  "turnover",      :default => 0.0
+    t.boolean  "trial",              :default => false
+    t.decimal  "turnover",           :default => 0.0
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -500,8 +500,8 @@ ActiveRecord::Schema.define(:version => 20150916061809) do
     t.string   "originator_type"
     t.boolean  "eligible",                                       :default => true
     t.string   "adjustable_type"
-    t.decimal  "included_tax",    :precision => 10, :scale => 2, :default => 0.0,  :null => false
     t.string   "state"
+    t.decimal  "included_tax",    :precision => 10, :scale => 2, :default => 0.0,  :null => false
   end
 
   add_index "spree_adjustments", ["adjustable_id"], :name => "index_adjustments_on_order_id"
@@ -602,9 +602,9 @@ ActiveRecord::Schema.define(:version => 20150916061809) do
     t.string   "currency"
     t.decimal  "distribution_fee",     :precision => 10, :scale => 2
     t.string   "shipping_method_name"
-    t.decimal  "final_weight_volume",  :precision => 10, :scale => 2
     t.decimal  "cost_price",           :precision => 8,  :scale => 2
     t.integer  "tax_category_id"
+    t.decimal  "final_weight_volume",  :precision => 10, :scale => 2
   end
 
   add_index "spree_line_items", ["order_id"], :name => "index_line_items_on_order_id"
@@ -695,9 +695,9 @@ ActiveRecord::Schema.define(:version => 20150916061809) do
     t.string   "currency"
     t.string   "last_ip_address"
     t.integer  "cart_id"
-    t.integer  "customer_id"
     t.integer  "created_by_id"
     t.string   "channel",                                                           :default => "spree"
+    t.integer  "customer_id"
   end
 
   add_index "spree_orders", ["completed_at"], :name => "index_spree_orders_on_completed_at"
@@ -840,7 +840,7 @@ ActiveRecord::Schema.define(:version => 20150916061809) do
   add_index "spree_product_translations", ["spree_product_id"], :name => "index_spree_product_translations_on_spree_product_id"
 
   create_table "spree_products", :force => true do |t|
-    t.string   "name",                 :default => "", :null => false
+    t.string   "name",                 :default => "",   :null => false
     t.text     "description"
     t.datetime "available_on"
     t.datetime "deleted_at"
@@ -849,8 +849,8 @@ ActiveRecord::Schema.define(:version => 20150916061809) do
     t.string   "meta_keywords"
     t.integer  "tax_category_id"
     t.integer  "shipping_category_id"
-    t.datetime "created_at",                           :null => false
-    t.datetime "updated_at",                           :null => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
     t.integer  "supplier_id"
     t.boolean  "group_buy"
     t.float    "group_buy_unit_size"
@@ -858,8 +858,8 @@ ActiveRecord::Schema.define(:version => 20150916061809) do
     t.float    "variant_unit_scale"
     t.string   "variant_unit_name"
     t.text     "notes"
-    t.integer  "primary_taxon_id",                        :null => false
-    t.boolean  "inherits_properties",  :default => true,  :null => false
+    t.integer  "primary_taxon_id",                       :null => false
+    t.boolean  "inherits_properties",  :default => true, :null => false
   end
 
   add_index "spree_products", ["available_on"], :name => "index_products_on_available_on"

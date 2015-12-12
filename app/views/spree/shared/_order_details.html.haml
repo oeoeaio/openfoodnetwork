@@ -1,3 +1,6 @@
+- #TODO: Work out what to do with multiple shipments, page as it is can only display information for one shipment
+- shipping_method = order.shipments.first.shipping_method
+
 .row
   .columns.large-6
     .order-summary.text-small
@@ -29,16 +32,16 @@
         = order.bill_address.phone
 
   .columns.large-6
-    - if order.shipping_method.andand.require_ship_address
+    - if shipping_method.andand.require_ship_address
       // Delivery option
       .order-summary.text-small
-        %strong= order.shipping_method.name
+        %strong= shipping_method.name
       .pad
         .text-big
           Delivery on
           %strong #{order.order_cycle.pickup_time_for(order.distributor)}
         %p.text-small.text-skinny.pre-line
-          %em= order.shipping_method.description.andand.html_safe || ""
+          %em= shipping_method.description.andand.html_safe || ""
       .order-summary.text-small
         %strong
           Delivery address
@@ -58,13 +61,13 @@
     - else
       // Collection option
       .order-summary.text-small
-        %strong= order.shipping_method.name
+        %strong= shipping_method.name
       .pad
         .text-big
           Ready for collection
           %strong #{order.order_cycle.pickup_time_for(order.distributor)}
         %p.text-small.text-skinny.pre-line
-          %em= order.shipping_method.description.andand.html_safe || ""
+          %em= shipping_method.description.andand.html_safe || ""
 
         - if order.order_cycle.pickup_instructions_for(order.distributor).present?
           %br

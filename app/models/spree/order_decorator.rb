@@ -25,7 +25,7 @@ Spree::Order.class_eval do
     go_to_state :delivery
     go_to_state :payment, :if => lambda { |order|
       # Fix for #2191
-      if order.shipping_method.andand.require_ship_address and
+      if order.shipping_methods.map(&:require_ship_address).any? and
         if order.ship_address.andand.valid?
           order.create_shipment!
           order.update_totals
@@ -258,7 +258,7 @@ Spree::Order.class_eval do
       # We copy over the shipping address when we have no shipping method selected
       # We can refactor this when we drop the multi-step checkout option
       #
-      if shipping_method.andand.require_ship_address == false
+      if shipping_methods.map(&:require_ship_address).any? == false
         self.ship_address = distributor.address.clone
 
         if bill_address
