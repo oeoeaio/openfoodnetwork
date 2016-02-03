@@ -1,4 +1,4 @@
-angular.module("admin.indexUtils").directive "ofnSelect2", ($timeout, blankOption) ->
+angular.module("admin.indexUtils").directive "ofnSelect2", ($timeout) ->
   require: 'ngModel'
   restrict: 'C'
   scope:
