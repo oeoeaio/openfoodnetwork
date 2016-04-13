@@ -35,6 +35,7 @@
 //= require ./orders/orders
 //= require ./order_cycles/order_cycles
 //= require ./payment_methods/payment_methods
+//= require ./pos/pos
 //= require ./products/products
 //= require ./resources/resources
 //= require ./shipping_methods/shipping_methods
