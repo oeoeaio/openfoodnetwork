@@ -9,6 +9,26 @@ module Admin
       render_as_json line_items.result.reorder('order_id ASC, id ASC')
     end
 
+    # POST /admin/bulk_line_items/:id.json
+    #
+    def create
+      variant = Spree::Variant.find(params[:line_item][:variant_id])
+      OpenFoodNetwork::ScopeVariantToHub.new(@order.distributor).scope(variant)
+
+      @line_item = @order.add_variant(variant, params[:line_item][:quantity].to_i)
+      if @order.save
+       respond_with(@line_item) do |format|
+          format.json do
+            if request.referrer == main_app.admin_pos_url
+              render json: @line_item, serializer: Api::Admin::ForPos::LineItemSerializer
+            else
+              render_as_json @line_item
+            end
+          end
+        end
+      end
+    end
+
     # PUT /admin/bulk_line_items/:id.json
     #
     def update
