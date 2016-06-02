@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160527012603) do
+ActiveRecord::Schema.define(:version => 20160602073041) do
 
   create_table "account_invoices", :force => true do |t|
     t.integer  "user_id",    :null => false
@@ -407,6 +407,15 @@ ActiveRecord::Schema.define(:version => 20160527012603) do
   add_index "exchanges", ["payment_enterprise_id"], :name => "index_exchanges_on_payment_enterprise_id"
   add_index "exchanges", ["receiver_id"], :name => "index_exchanges_on_receiver_id"
   add_index "exchanges", ["sender_id"], :name => "index_exchanges_on_sender_id"
+
+  create_table "inventories", :force => true do |t|
+    t.integer  "enterprise_id", :null => false
+    t.string   "name",          :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "inventories", ["enterprise_id", "name"], :name => "index_inventories_on_enterprise_id_and_name", :unique => true
 
   create_table "inventory_items", :force => true do |t|
     t.integer  "enterprise_id",                   :null => false
@@ -1285,6 +1294,8 @@ ActiveRecord::Schema.define(:version => 20160527012603) do
   add_foreign_key "exchanges", "enterprises", name: "exchanges_receiver_id_fk", column: "receiver_id"
   add_foreign_key "exchanges", "enterprises", name: "exchanges_sender_id_fk", column: "sender_id"
   add_foreign_key "exchanges", "order_cycles", name: "exchanges_order_cycle_id_fk"
+
+  add_foreign_key "inventories", "enterprises", name: "inventories_enterprise_id_fk"
 
   add_foreign_key "order_cycles", "enterprises", name: "order_cycles_coordinator_id_fk", column: "coordinator_id"
 
