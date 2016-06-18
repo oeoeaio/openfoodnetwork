@@ -17,12 +17,16 @@ module Admin
 
       @line_item = @order.add_variant(variant, params[:line_item][:quantity].to_i)
       if @order.save
-       respond_with(@line_item) do |format|
+        respond_with(@line_item) do |format|
           format.json do
-            if request.referrer == main_app.admin_pos_url
-              render json: @line_item, serializer: Api::Admin::ForPos::LineItemSerializer
-            else
-              render_as_json @line_item
+            format.json do
+              if request.referrer == main_app.admin_pos_url
+                line_item = Api::Admin::ForPos::LineItemSerializer.new(@line_item.reload).serializable_hash
+                order = Api::Admin::ForPos::OrderSerializer.new(@order.reload).serializable_hash
+                render json: { line_item: line_item, order: order }
+              else
+                render_as_json @line_item.reload
+              end
             end
           end
         end
@@ -56,7 +60,12 @@ module Admin
       authorize! :update, order
 
       @line_item.destroy
-      render nothing: true, status: 204 # No Content, does not trigger ng resource auto-update
+      order.update_distribution_charge!
+      if request.referrer == main_app.admin_pos_url
+        render json: order.reload, serializer: Api::Admin::ForPos::OrderSerializer
+      else
+        render nothing: true, status: 204 # No Content, does not trigger ng resource auto-update
+      end
     end
 
     private
