@@ -4,7 +4,7 @@ Spree::Admin::OrdersController.class_eval do
   include OpenFoodNetwork::SpreeApiKeyLoader
   helper CheckoutHelper
   before_filter :load_spree_api_key, :only => :bulk_management
-  before_filter :load_order, only: %i[show edit update fire resend invoice print print_ticket]
+  before_filter :load_order, only: %i[show edit update fire resend invoice print print_ticket populate]
 
   before_filter :load_distribution_choices, only: [:new, :edit, :update]
 
@@ -95,6 +95,24 @@ Spree::Admin::OrdersController.class_eval do
 
   def update_distribution_charge
     @order.update_distribution_charge!
+  end
+
+  def populate
+    Spree::Adjustment.without_callbacks do
+      populator = Spree::OrderPopulator.new(@order, @order.currency)
+
+      if populator.populate(params.slice(:products, :variants, :quantity), true)
+        @order.cap_quantity_at_stock!
+        @order.update_distribution_charge!
+        @order.update!
+        line_items = ActiveModel::ArraySerializer.new(@order.line_items, each_serializer: Api::Admin::ForPos::LineItemSerializer)
+        order = Api::Admin::ForPos::OrderSerializer.new(@order).serializable_hash
+
+        render json: {line_items: line_items, order: order}, status: 200
+      else
+        render json: {error: true}, status: 412
+      end
+    end
   end
 
   private
