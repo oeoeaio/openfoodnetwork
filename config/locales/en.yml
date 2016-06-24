@@ -172,6 +172,8 @@ en:
     form_invalid: "Form contains missing or invalid fields"
     clear_filters: Clear Filters
     clear: Clear
+    show_more: Show more
+    show_n_more: Show %{num} more
 
     columns: Columns
     actions: Actions
@@ -695,9 +697,13 @@ en:
   on_demand: On demand
   none: None
   not_allowed: Not allowed
+  days: days
 
+
+  label_shop: "Shop"
   label_shops: "Shops"
   label_map: "Map"
+  label_producer: "Producer"
   label_producers: "Producers"
   label_groups: "Groups"
   label_about: "About"
