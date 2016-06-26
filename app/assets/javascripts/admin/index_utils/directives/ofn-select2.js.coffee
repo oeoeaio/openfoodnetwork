@@ -12,7 +12,12 @@ angular.module("admin.indexUtils").directive "ofnSelect2", ($sanitize, $timeout,
     $timeout ->
       scope.text ||= 'name'
       scope.filter ||= -> true
-      scope.data.unshift(scope.blank) if scope.blank? && typeof scope.blank is "object"
+
+      if scope.blank? && typeof scope.blank is "object"
+        scope.data.unshift(scope.blank)
+        if scope.data.$promise && !scope.data.$resolved
+          # This add the blank option after data is resolved
+          scope.data.$promise.then -> scope.data.unshift(scope.blank)
 
       item.name = $sanitize(item.name) for item in scope.data
       element.select2
