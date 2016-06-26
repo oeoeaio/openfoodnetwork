@@ -649,6 +649,8 @@ en:
         tags: Tags
         delivery_details: Pickup / Delivery details
         debug_info: Debug information
+      index:
+        involving: Involving
       name_and_timing_form:
         name: Name
         orders_open: Orders open at
