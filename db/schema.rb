@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160630052453) do
+ActiveRecord::Schema.define(:version => 20160630055825) do
 
   create_table "account_invoices", :force => true do |t|
     t.integer  "user_id",    :null => false
@@ -417,6 +417,11 @@ ActiveRecord::Schema.define(:version => 20160630052453) do
   end
 
   add_index "inventory_items", ["enterprise_id", "variant_id"], :name => "index_inventory_items_on_enterprise_id_and_variant_id", :unique => true
+
+  create_table "order_cycle_schedules", :force => true do |t|
+    t.integer "order_cycle_id", :null => false
+    t.integer "schedule_id",    :null => false
+  end
 
   create_table "order_cycles", :force => true do |t|
     t.string   "name"
@@ -1291,6 +1296,9 @@ ActiveRecord::Schema.define(:version => 20160630052453) do
   add_foreign_key "exchanges", "enterprises", name: "exchanges_receiver_id_fk", column: "receiver_id"
   add_foreign_key "exchanges", "enterprises", name: "exchanges_sender_id_fk", column: "sender_id"
   add_foreign_key "exchanges", "order_cycles", name: "exchanges_order_cycle_id_fk"
+
+  add_foreign_key "order_cycle_schedules", "order_cycles", name: "oc_schedules_order_cycle_id_fk"
+  add_foreign_key "order_cycle_schedules", "schedules", name: "oc_schedules_schedule_id_fk"
 
   add_foreign_key "order_cycles", "enterprises", name: "order_cycles_coordinator_id_fk", column: "coordinator_id"
 
