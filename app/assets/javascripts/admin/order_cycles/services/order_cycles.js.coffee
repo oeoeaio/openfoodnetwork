@@ -77,3 +77,8 @@ angular.module("admin.orderCycles").factory 'OrderCycles', ($q, OrderCycleResour
       for shop, i in orderCycle.shops
         shop = Enterprises.enterprisesByID[shop.id]
         orderCycle.shops[i] = shop if shop?
+
+    linkToSchedules: (orderCycle) ->
+      for schedule, i in orderCycle.schedules
+        schedule = Schedules.byID[schedule.id]
+        orderCycle.schedules[i] = schedule if schedule?
