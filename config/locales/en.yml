@@ -173,6 +173,7 @@ en:
     order_cycles:
       index:
         involving: Involving
+        schedule: Schedule
         schedules: Schedules
         adding_a_new_schedule: Adding A New Schedule
         updating_a_schedule: Updating A Schedule
