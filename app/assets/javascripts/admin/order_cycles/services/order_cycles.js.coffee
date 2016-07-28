@@ -1,21 +1,15 @@
-angular.module("admin.orderCycles").factory 'OrderCycles', ($q, OrderCycleResource, StatusMessage, Enterprises, blankOption) ->
+angular.module("admin.orderCycles").factory 'OrderCycles', ($q, OrderCycleResource, StatusMessage) ->
   new class OrderCycles
-    orderCyclesByID: {}
+    byID: {}
     pristineByID: {}
 
     index: (params={}, callback=null) ->
-      includeBlank = !!params['includeBlank']
-      delete params['includeBlank']
-      OrderCycleResource.index(params, (data) =>
-        for orderCycle in data
-          @orderCyclesByID[orderCycle.id] = orderCycle
+      request = OrderCycleResource.index params, (data) =>
+        for orderCycle in data when orderCycle.id not in Object.keys(@byID)
+          @byID[orderCycle.id] = orderCycle
           @pristineByID[orderCycle.id] = angular.copy(orderCycle)
-
         (callback || angular.noop)(data)
-
-        data.unshift(blankOption()) if includeBlank
         data
-      )
 
     save: (order_cycle) ->
       deferred = $q.defer()
@@ -29,15 +23,17 @@ angular.module("admin.orderCycles").factory 'OrderCycles', ($q, OrderCycleResour
 
     saveChanges: (form) ->
       changed = {}
-      for id, orderCycle of @orderCyclesByID when not @saved(orderCycle)
+      for id, orderCycle of @byID when not @saved(orderCycle)
         changed[Object.keys(changed).length] = @changesFor(orderCycle)
       if Object.keys(changed).length > 0
         StatusMessage.display('progress', "Saving...")
         OrderCycleResource.bulkUpdate { order_cycle_set: { collection_attributes: changed } }, (data) =>
           for orderCycle in data
-            angular.extend(@orderCyclesByID[orderCycle.id], orderCycle)
+            delete orderCycle.coordinator
+            delete orderCycle.producers
+            delete orderCycle.distributors
+            angular.extend(@byID[orderCycle.id], orderCycle)
             angular.extend(@pristineByID[orderCycle.id], orderCycle)
-            @linkToEnterprises(orderCycle)
           form.$setPristine() if form?
           StatusMessage.display('success', "Order cycles have been updated.")
         , (response) =>

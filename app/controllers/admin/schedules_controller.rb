@@ -38,9 +38,11 @@ module Admin
       return unless params[:schedule][:order_cycle_ids]
       requested = params[:schedule][:order_cycle_ids]
       existing = @schedule.order_cycle_ids
-      permitted = OrderCycle.where(id: params[:schedule][:order_cycle_ids] + existing).merge(OrderCycle.managed_by(spree_current_user)).pluck(:id)
-      params[:schedule][:order_cycle_ids] |= (existing - permitted)
-      params[:schedule][:order_cycle_ids] -= (requested - permitted)
+      permitted = OrderCycle.where(id: params[:schedule][:order_cycle_ids] | existing).merge(OrderCycle.managed_by(spree_current_user)).pluck(:id)
+      result = existing
+      result |= (requested & permitted) # add any requested & permitted ids
+      result -= ((result & permitted) - requested) # remove any existing and permitted ids that were not specifically requested
+      params[:schedule][:order_cycle_ids] = result
     end
 
     def permissions
