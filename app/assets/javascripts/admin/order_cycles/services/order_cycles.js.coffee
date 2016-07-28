@@ -1,4 +1,4 @@
-angular.module("admin.orderCycles").factory 'OrderCycles', ($q, OrderCycleResource, StatusMessage) ->
+angular.module("admin.orderCycles").factory 'OrderCycles', ($q, OrderCycleResource, RequestMonitor, StatusMessage) ->
   new class OrderCycles
     byID: {}
     pristineByID: {}
@@ -10,6 +10,8 @@ angular.module("admin.orderCycles").factory 'OrderCycles', ($q, OrderCycleResour
           @pristineByID[orderCycle.id] = angular.copy(orderCycle)
         (callback || angular.noop)(data)
         data
+      RequestMonitor.load(request.$promise)
+      request
 
     save: (order_cycle) ->
       deferred = $q.defer()
