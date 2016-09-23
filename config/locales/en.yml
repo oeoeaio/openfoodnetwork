@@ -730,6 +730,10 @@ en:
         description: Invoices for import into Xero
       packing:
         name: Packing Reports
+    standing_orders:
+      details:
+        details: 'Details'
+
 # Frontend views
 #
 # These keys are referenced relatively like `t('.message')` in
