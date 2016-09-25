@@ -738,6 +738,7 @@ en:
       packing:
         name: Packing Reports
     standing_orders:
+      standing_orders: Standing Orders
       new: New Standing Order
       create: Create Standing Order
       steps:
