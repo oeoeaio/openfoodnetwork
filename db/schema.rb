@@ -1062,11 +1062,12 @@ ActiveRecord::Schema.define(:version => 20170921065259) do
   end
 
   create_table "standing_line_items", :force => true do |t|
-    t.integer  "standing_order_id", :null => false
-    t.integer  "variant_id",        :null => false
-    t.integer  "quantity",          :null => false
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.integer  "standing_order_id",                               :null => false
+    t.integer  "variant_id",                                      :null => false
+    t.integer  "quantity",                                        :null => false
+    t.datetime "created_at",                                      :null => false
+    t.datetime "updated_at",                                      :null => false
+    t.decimal  "price_estimate",    :precision => 8, :scale => 2
   end
 
   create_table "standing_order_orders", :force => true do |t|
