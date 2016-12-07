@@ -117,10 +117,6 @@ en:
   say_yes: "Yes"
   then: then
   ongoing: Ongoing
-  closes: Closes
-  closed: Closed
-  could_not_cancel_the_order: Could not cancel the order
-  could_not_resume_the_order: Could not resume the order
   bill_address: Billing Address
   ship_address: Shipping Address
   sort_order_cycles_on_shopfront_by: "Sort Order Cycles On Shopfront By"
@@ -764,6 +760,8 @@ en:
       orders:
         number: Number
         status: Status
+      confirm_cancel_msg: Are you sure you want to cancel this standing order? This action cannot be undone.
+      cancel_failure_msg: 'Sorry, cancellation failed!' 
 
 # Frontend views
 #
@@ -2143,7 +2141,7 @@ Please follow the instructions there to make your enterprise visible on the Open
       address: address
       adjustments: adjustments
       awaiting_return: awaiting return
-      canceled: cancelled
+      canceled: canceled
       cart: cart
       complete: complete
       confirm: confirm
