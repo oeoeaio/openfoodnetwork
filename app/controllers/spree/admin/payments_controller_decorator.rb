@@ -1,13 +1,19 @@
 Spree::Admin::PaymentsController.class_eval do
   append_before_filter :filter_payment_methods
 
+  respond_to :json
+
   respond_override create: { json: { success: lambda {
     if request.referrer == main_app.admin_pos_url
+      @payment.capture!
       order = Api::Admin::ForPos::OrderSerializer.new(@order.reload).serializable_hash
       render json: { order: order }
     else
       render_as_json @payment.reload
     end
+  },
+  failure: lambda {
+    binding.pry
   } } }
 
   # When a user fires an event, take them back to where they came from
