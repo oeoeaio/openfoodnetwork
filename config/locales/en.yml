@@ -148,6 +148,7 @@ en:
   available: Available
   dashboard: Dashboard
   ok: Ok
+  copy: Copy
 
   admin:
     # Common properties / models
