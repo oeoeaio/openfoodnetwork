@@ -79,6 +79,7 @@ en:
   ship_address: Shipping Address
   cancel: Cancel
   ok: Ok
+  copy: Copy
 
   sort_order_cycles_on_shopfront_by: "Sort Order Cycles On Shopfront By"
 
