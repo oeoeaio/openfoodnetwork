@@ -174,7 +174,8 @@ en:
   show_only_unfulfilled_orders: Show only unfulfilled orders
   filter_results: Filter Results
   quantity: Quantity
-
+  ok: Ok
+  copy: Copy
 
   actions:
     create_and_add_another: "Create and Add Another"
