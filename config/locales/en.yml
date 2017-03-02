@@ -2398,6 +2398,7 @@ Please follow the instructions there to make your enterprise visible on the Open
       confirm: confirm
       delivery: delivery
       payment: payment
+      pending: pending
       resumed: resumed
       returned: returned
       skrill: skrill
