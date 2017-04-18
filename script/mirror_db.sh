@@ -23,7 +23,7 @@ fi
 echo "Mirroring database..."
 echo "drop database open_food_network_dev" | psql -h localhost -U ofn open_food_network_test
 echo "create database open_food_network_dev" | psql -h localhost -U ofn open_food_network_test
-ssh $1 "pg_dump -h localhost -U $DB_USER $DB_DATABASE |gzip" |gunzip |psql -h localhost -U ofn open_food_network_dev
+ssh $1 "pg_dump -h localhost -U $DB_USER $DB_DATABASE --exclude-table-data=sessions |gzip" |gunzip |psql -h localhost -U ofn open_food_network_dev
 
 
 # -- Disable S3
