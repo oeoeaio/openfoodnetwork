@@ -12,15 +12,16 @@ module OpenFoodNetwork
     end
 
     def self.payment_method_export
-      CSV.open("enterprises_payment-methods.csv", "wb") do |csv|
+      CSV.open("enterprises_payment-methods-by-month.csv", "wb") do |csv|
         header = ["Name", "Payment Method"]
         header += months.map{ |m| m[:name] }
         csv << header
         Enterprise.order('name ASC').each do |enterprise|
-          orders = Spree::Order.complete.where(distributor_id: enterprise.id)
-          Spree::PaymentMethod.for_distributor(enterprise.id).each do |payment_method|
-            scoped = orders.joins(:payments).where('spree_payments.payment_method_id = ?', payment_method.id)
-            csv << payment_method_data_for(enterprise, payment_method, scoped)
+          orders = Spree::Order.complete.joins(:payments).where(distributor_id: enterprise.id)
+          payment_method_ids = orders.pluck('spree_payments.payment_method_id').uniq
+          payment_method_ids.select(&:present?).each do |payment_method_id|
+            scoped = orders.where('spree_payments.payment_method_id = ?', payment_method_id)
+            csv << payment_method_data_for(enterprise, payment_method_id, scoped)
           end
         end
       end
@@ -28,15 +29,16 @@ module OpenFoodNetwork
     end
 
     def self.shipping_method_export
-      CSV.open("enterprises_shipping-methods.csv", "wb") do |csv|
+      CSV.open("enterprises_shipping-methods-by-month.csv", "wb") do |csv|
         header = ["Name", "Shipping Method", "Pickup/Delivery"]
         header += months.map{ |m| m[:name] }
         csv << header
         Enterprise.order('name ASC').each do |enterprise|
-          orders = Spree::Order.complete.where(distributor_id: enterprise.id)
-          Spree::ShippingMethod.for_distributor(enterprise.id).each do |shipping_method|
-            scoped = orders.where('shipping_method_id = ?', shipping_method.id)
-            csv << shipping_method_data_for(enterprise, shipping_method, scoped)
+          orders = Spree::Order.complete.joins(:shipments).where(distributor_id: enterprise.id)
+          shipping_method_ids = orders.pluck('spree_shipments.shipping_method_id').uniq
+          shipping_method_ids.select(&:present?).each do |shipping_method_id|
+            scoped = orders.where('spree_shipments.shipping_method_id = ?', shipping_method_id)
+            csv << shipping_method_data_for(enterprise, shipping_method_id, scoped)
           end
         end
       end
@@ -99,10 +101,11 @@ module OpenFoodNetwork
       data
     end
 
-    def self.payment_method_data_for(enterprise, payment_method, orders)
+    def self.payment_method_data_for(enterprise, payment_method_id, orders)
+      payment_method = Spree::PaymentMethod.unscoped.find_by_id(payment_method_id)
       data = []
       data << enterprise.name
-      data << payment_method.name
+      data << (payment_method.andand.name || "[DELETED]")
       months.each do |month|
         next data << 0 unless orders.count > 0
         scoped = orders.where("completed_at >= ? AND completed_at < ?", month[:start], month[:stop])
@@ -111,11 +114,12 @@ module OpenFoodNetwork
       data
     end
 
-    def self.shipping_method_data_for(enterprise, shipping_method, orders)
+    def self.shipping_method_data_for(enterprise, shipping_method_id, orders)
+      shipping_method = Spree::ShippingMethod.unscoped.find_by_id(shipping_method_id)
       data = []
       data << enterprise.name
-      data << shipping_method.name
-      data << (shipping_method.require_ship_address ? "Delivery" : "Pickup")
+      data << (shipping_method.andand.name || "[DELETED]")
+      data << (shipping_method ? (shipping_method.require_ship_address ? "Delivery" : "Pickup") : "[DELETED]")
       order_count = orders.count
       months.each do |month|
         next data << 0 unless order_count > 0

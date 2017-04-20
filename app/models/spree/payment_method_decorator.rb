@@ -3,6 +3,7 @@ Spree::PaymentMethod.class_eval do
 
   acts_as_taggable
 
+  has_many :payments, class_name: "Spree::Payment"
   has_and_belongs_to_many :distributors, join_table: 'distributors_payment_methods', :class_name => 'Enterprise', association_foreign_key: 'distributor_id'
 
   attr_accessible :distributor_ids, :tag_list
