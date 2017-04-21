@@ -277,15 +277,19 @@ Spree::Order.class_eval do
       # We can refactor this when we drop the multi-step checkout option
       #
       if shipping_method.andand.require_ship_address == false
-        self.ship_address = distributor.address.clone
-
-        if bill_address
-          self.ship_address.firstname = bill_address.firstname
-          self.ship_address.lastname = bill_address.lastname
-          self.ship_address.phone = bill_address.phone
-        end
+        self.ship_address = address_from_distributor
       end
     end
+  end
+
+  def address_from_distributor
+    address = distributor.address.clone
+    if bill_address
+      address.firstname = bill_address.firstname
+      address.lastname = bill_address.lastname
+      address.phone = bill_address.phone
+    end
+    address
   end
 
   def provided_by_order_cycle?(line_item)
