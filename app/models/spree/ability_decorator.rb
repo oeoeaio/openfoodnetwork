@@ -250,7 +250,7 @@ class AbilityDecorator
     can [:admin, :index, :update, :destroy], Customer, enterprise_id: Enterprise.managed_by(user).pluck(:id)
 
     # POS Page
-    can [:admin, :show], :pos
+    can [:admin, :show, :data], :pos
   end
 
   def add_relationship_management_abilities(user)

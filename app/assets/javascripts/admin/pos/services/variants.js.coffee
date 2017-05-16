@@ -1,9 +1,9 @@
-angular.module("admin.pos").factory "Variants", (variants) ->
+angular.module("admin.pos").factory "Variants", ->
   new class Variants
     all: []
     byID: {}
 
-    constructor: ->
+    load: (variants) ->
       for variant in variants
         @all.push variant
         @byID[variant.id] = variant
@@ -11,5 +11,5 @@ angular.module("admin.pos").factory "Variants", (variants) ->
     linkToProducts: (productsByID) ->
       for variant in @all
         variant.product = productsByID[variant.product.id]
-        variant.product.variants ||= []
+        variant.product.variants ?= []
         variant.product.variants.push variant

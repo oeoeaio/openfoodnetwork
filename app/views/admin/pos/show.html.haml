@@ -1,22 +1,17 @@
-= admin_inject_json_ams_array "admin.pos", "addresses", @addresses, Api::Admin::AddressSerializer
-= admin_inject_json_ams_array "admin.pos", "customers", @customers, Api::Admin::ForPos::CustomerSerializer
-= admin_inject_json_ams_array "admin.pos", "orders", @orders, Api::Admin::ForPos::OrderSerializer
-= admin_inject_json_ams_array "admin.pos", "lineItems", @line_items, Api::Admin::ForPos::LineItemSerializer
-= admin_inject_json_ams_array "admin.pos", "variants", @variants, Api::Admin::ForPos::VariantSerializer
-= admin_inject_json_ams_array "admin.pos", "products", @products, Api::Admin::ForPos::ProductSerializer
-= admin_inject_json_ams_array "admin.pos", "paymentMethods", @payment_methods, Api::Admin::IdNameSerializer
-
 .pos{ ng: { app: "admin.pos", controller: "POSCtrl" } }
-  .row
+  .row{ ng: { hide: 'shopID && orderCycleID' } }
+    .small-12.medium-8.large-4.small-centered.columns
+      Select a Shop:
+      %br
+      %select{ ng: { model: 'shopID', options: 's.id as s.name for s in shops' } }
+
+      and an Order Cycle:
+      %br
+      %select{ ng: { model: 'orderCycleID', options: 'oc.id as oc.name for oc in orderCycles' } }
+
+  .row{ ng: { show: 'shopID && orderCycleID' } }
     .small-12.medium-6.large-5.columns
       = render 'cart'
     .small-12.medium-6.large-7.columns
       = render 'products'
       = render 'pay'
-
-    -# - if @order.total_tax > 0
-    -#   %tr
-    -#     %td.text-right{colspan:"3"} (includes tax)
-    -#     %td.text-right
-    -#       %span.order-total.tax-total= display_checkout_tax_total(@order)
-    -#     %td

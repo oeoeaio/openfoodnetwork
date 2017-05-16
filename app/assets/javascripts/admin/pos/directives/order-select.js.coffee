@@ -1,17 +1,16 @@
-angular.module("admin.pos").directive "orderSelect", ($sanitize, $timeout) ->
+angular.module("admin.pos").directive "orderSelect", ($sanitize, Orders) ->
   require: 'ngModel'
   restrict: 'C'
   scope:
-    data: "="
     minSearch: "@?"
   link: (scope, element, attrs, ngModel) ->
-    $timeout ->
-      item.name = $sanitize(item.name) for item in scope.data
+    scope.$on 'orders.loaded', ->
+      item.name = $sanitize(item.name) for item in Orders.all
       element.select2
         width: "100%"
         placeholder: "Select an order..."
         minimumResultsForSearch: scope.minSearch || 0
-        data: { results: scope.data, text: 'full_name' }
+        data: { results: Orders.all, text: 'full_name' }
         formatSelection: (item) ->
           "<b>#{item.full_name}</b> (#{item.completed_at})"
         formatResult: (item) ->
