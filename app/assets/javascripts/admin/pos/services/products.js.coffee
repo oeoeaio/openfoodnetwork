@@ -1,9 +1,9 @@
-angular.module("admin.pos").factory "Products", (products) ->
+angular.module("admin.pos").factory "Products", ->
   new class Products
     all: []
     byID: {}
 
-    constructor: ->
+    load: (products) ->
       for product in products
         @all.push product
         @byID[product.id] = product

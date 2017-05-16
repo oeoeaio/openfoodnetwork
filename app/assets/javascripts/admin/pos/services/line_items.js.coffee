@@ -1,4 +1,4 @@
-angular.module("admin.pos").factory "LineItems", ($resource, lineItems, Orders, Variants) ->
+angular.module("admin.pos").factory "LineItems", ($resource, Orders, Variants) ->
   LineItemResource = $resource '/admin/bulk_line_items/:id/:action.json', {order_id: '@order_id'},
     'add':
       method: 'POST'
@@ -8,7 +8,7 @@ angular.module("admin.pos").factory "LineItems", ($resource, lineItems, Orders, 
     all: []
     byID: {}
 
-    constructor: ->
+    load: (lineItems) ->
       for lineItem in lineItems
         @all.push lineItem
         @byID[lineItem.id] = lineItem
@@ -22,7 +22,7 @@ angular.module("admin.pos").factory "LineItems", ($resource, lineItems, Orders, 
       lineItem.order = Orders.byID[lineItem.order.id]
 
     addToOrder: (lineItem) ->
-      lineItem.order.lineItems ||= []
+      lineItem.order.lineItems ?= []
       lineItem.order.lineItems.push lineItem
 
     linkToVariants: ->

@@ -177,7 +177,9 @@ Openfoodnetwork::Application.routes.draw do
       get :status, on: :collection
     end
 
-    resource :pos, only: [:show], controller: 'pos'
+    resource :pos, only: [:show], controller: 'pos' do
+      get :data
+    end
   end
 
   namespace :api do
