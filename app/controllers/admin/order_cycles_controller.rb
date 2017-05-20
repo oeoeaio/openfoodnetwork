@@ -118,6 +118,10 @@ module Admin
       [:index, :bulk_update]
     end
 
+    def collection_actions
+      [:index, :bulk_update]
+    end
+
     private
     def load_data_for_index
       @show_more = !!params[:show_more]
