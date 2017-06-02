@@ -1,6 +1,9 @@
 Darkswarm.factory 'Enterprises', (enterprises, CurrentHub, Taxons, Dereferencer, visibleFilter, Matcher, Geo, $rootScope) ->
   new class Enterprises
     enterprises_by_id: {}
+
+    geocodeResult: null
+
     constructor: ->
       # Populate Enterprises.enterprises from json in page.
       @enterprises = enterprises
@@ -52,19 +55,21 @@ Darkswarm.factory 'Enterprises', (enterprises, CurrentHub, Taxons, Dereferencer,
       if query?.length > 0
         if firstMatching?
           @setDistanceFrom firstMatching
-        else
-          @calculateDistanceGeo query
+        @geocodeQuery query, =>
+          @setDistanceFrom @geocodeResult.geometry.location
       else
         @resetDistance()
 
-    calculateDistanceGeo: (query) ->
+    geocodeQuery: (query, callback) ->
       Geo.geocode query, (results, status) =>
-        $rootScope.$apply =>
-          if status == Geo.OK
-            #console.log "Geocoded #{query} -> #{results[0].geometry.location}."
-            @setDistanceFrom results[0].geometry.location
-          else
-            console.log "Geocoding failed for the following reason: #{status}"
+        if status == Geo.OK
+          $rootScope.$apply =>
+            @geocodeResult = results[0]
+            callback()
+        else
+          console.log "Geocoding failed for the following reason: #{status}"
+          $rootScope.$apply =>
+            @geocodeResult = null
             @resetDistance()
 
     setDistanceFrom: (locatable) ->
@@ -72,5 +77,5 @@ Darkswarm.factory 'Enterprises', (enterprises, CurrentHub, Taxons, Dereferencer,
         enterprise.distance = Geo.distanceBetween enterprise, locatable
       $rootScope.$broadcast 'enterprisesChanged'
 
-    resetDistance: ->
+    resetDistance: =>
       enterprise.distance = null for enterprise in @enterprises
