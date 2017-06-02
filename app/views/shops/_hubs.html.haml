@@ -15,13 +15,13 @@
         %h2 Did you mean?
         = render "hubs_table", enterprises: "nameMatches"
 
-      .distance-matches{"ng-if" => "nameMatchesFiltered.length == 0 || distanceMatchesShown"}
+      .distance-matches{"ng-if" => "nameMatchesFiltered.length == 0 || distanceMatchesAvailable"}
         %h2{"ng-show" => "query.length > 0 && Enterprises.geocodeResult"}
           = t(:hubs_shops_near, location: "{{ Enterprises.geocodeResult.formatted_address }}")
 
         = render "hubs_table", enterprises: "distanceMatches"
 
-      .show-distance-matches{"ng-show" => "nameMatchesFiltered.length > 0 && !distanceMatchesShown && Enterprises.geocodeResult && distanceMatchesFiltered.length > 0"}
+      .show-distance-matches{"ng-show" => "nameMatchesFiltered.length > 0 && !distanceMatchesShown && distanceMatchesAvailable"}
         %a{href: "", "ng-click" => "showDistanceMatches()"}
           = t :hubs_distance_filter, location: "{{ Enterprises.geocodeResult.formatted_address }}"
   .more-controls
