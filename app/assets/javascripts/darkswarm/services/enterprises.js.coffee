@@ -1,8 +1,7 @@
-Darkswarm.factory 'Enterprises', (enterprises, CurrentHub, Taxons, Dereferencer, visibleFilter, Matcher, Geo, $rootScope) ->
+Darkswarm.factory 'Enterprises', (enterprises, CurrentHub, Taxons, Dereferencer, visibleFilter, Matcher, MapsAPI, $rootScope) ->
   new class Enterprises
     enterprises_by_id: {}
-
-    geocodeResult: null
+    distanceRef: null
 
     constructor: ->
       # Populate Enterprises.enterprises from json in page.
@@ -51,31 +50,33 @@ Darkswarm.factory 'Enterprises', (enterprises, CurrentHub, Taxons, Dereferencer,
         else
           false
 
-    calculateDistance: (query, firstMatching) ->
-      if query?.length > 0
-        if firstMatching?
-          @setDistanceFrom firstMatching
-        @geocodeQuery query, =>
-          @setDistanceFrom @geocodeResult.geometry.location
-      else
-        @resetDistance()
+    findPlace: (query) ->
+      return @resetDistance() unless query?.length > 0
+      MapsAPI.find query, (results, status) =>
+        if status == google.maps.places.PlacesServiceStatus.OK
+          if results[0]
+            @distanceRef = results[0].description
+            @calculateDistance(results[0].place_id)
+          else
+            @resetDistance()
+        else
+          @resetDistance()
 
-    geocodeQuery: (query, callback) ->
-      Geo.geocode query, (results, status) =>
-        if status == Geo.OK
+    calculateDistance: (placeId) ->
+      MapsAPI.geocodePlaceID placeId, (results, status) =>
+        if status == MapsAPI.GeoOK
           $rootScope.$apply =>
-            @geocodeResult = results[0]
-            callback()
+            @setDistanceFrom(results[0].geometry.location)
         else
           console.log "Geocoding failed for the following reason: #{status}"
           $rootScope.$apply =>
-            @geocodeResult = null
             @resetDistance()
 
     setDistanceFrom: (locatable) ->
-      for enterprise in @enterprises
-        enterprise.distance = Geo.distanceBetween enterprise, locatable
+      for enterprise in @hubs
+        enterprise.distance = MapsAPI.distanceBetween enterprise, locatable
       $rootScope.$broadcast 'enterprisesChanged'
 
     resetDistance: =>
+      @distanceRef = null
       enterprise.distance = null for enterprise in @enterprises

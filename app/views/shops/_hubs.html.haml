@@ -12,18 +12,18 @@
   .row
     .small-12.columns
       .name-matches{"ng-show" => "nameMatchesFiltered.length > 0"}
-        %h2 Did you mean?
+        %h2= t(:hubs_shops_matching, query: "{{ query }}")
         = render "hubs_table", enterprises: "nameMatches"
 
-      .distance-matches{"ng-if" => "nameMatchesFiltered.length == 0 || distanceMatchesAvailable"}
-        %h2{"ng-show" => "query.length > 0 && Enterprises.geocodeResult"}
-          = t(:hubs_shops_near, location: "{{ Enterprises.geocodeResult.formatted_address }}")
+      .distance-matches{"ng-if" => "nameMatchesFiltered.length == 0 || distanceMatchesShown"}
+        %h2{"ng-show" => "query.length > 0 && Enterprises.distanceRef"}
+          = t(:hubs_shops_near, location: "{{ Enterprises.distanceRef }}")
 
         = render "hubs_table", enterprises: "distanceMatches"
 
-      .show-distance-matches{"ng-show" => "nameMatchesFiltered.length > 0 && !distanceMatchesShown && distanceMatchesAvailable"}
+      .show-distance-matches{"ng-show" => "nameMatchesFiltered.length > 0 && !distanceMatchesShown && distanceMatches.length > 0"}
         %a{href: "", "ng-click" => "showDistanceMatches()"}
-          = t :hubs_distance_filter, location: "{{ Enterprises.geocodeResult.formatted_address }}"
+          = t(:hubs_did_you_mean, location: "{{ Enterprises.distanceRef }}")
   .more-controls
     %a.button{href: "", ng: {click: "showClosedShops()", show: "filterExpression.active"}}
       = t '.show_closed_shops'

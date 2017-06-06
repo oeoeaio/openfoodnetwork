@@ -8,7 +8,6 @@ Darkswarm.controller "EnterprisesCtrl", ($scope, $rootScope, $timeout, $location
   $scope.show_profiles = false
   $scope.filtersActive = false
   $scope.distanceMatchesShown = false
-  $scope.distanceMatchesAvailable = false
   $scope.filterExpression = {active: true}
 
 
@@ -16,13 +15,11 @@ Darkswarm.controller "EnterprisesCtrl", ($scope, $rootScope, $timeout, $location
     Enterprises.flagMatching query
     Search.search query
     $rootScope.$broadcast 'enterprisesChanged'
+    $scope.distanceMatchesShown = false
 
     $timeout ->
-      Enterprises.calculateDistance query, $scope.firstNameMatch()
+      Enterprises.findPlace query
       $rootScope.$broadcast 'enterprisesChanged'
-
-  $scope.$watch "Enterprises.geocodeResult", (geocodeResult) ->
-    $scope.distanceMatchesAvailable = (geocodeResult? && distanceMatchesFiltered.length > 0)
 
   $timeout ->
     if $location.search()['show_closed']?
@@ -41,7 +38,7 @@ Darkswarm.controller "EnterprisesCtrl", ($scope, $rootScope, $timeout, $location
   # calculated from, so we need to recalculate distances.
   $scope.$watch '[activeTaxons, activeProperties, shippingTypes, show_profiles]', ->
     $timeout ->
-      Enterprises.calculateDistance $scope.query, $scope.firstNameMatch()
+      Enterprises.findPlace $scope.query
       $rootScope.$broadcast 'enterprisesChanged'
   , true
 
