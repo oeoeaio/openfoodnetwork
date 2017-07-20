@@ -124,6 +124,7 @@ group :test do
 end
 
 group :development do
+  gem 'zeus', '>= 0.15.14'
   gem 'pry-byebug'
   gem 'debugger-linecache'
   gem 'guard'
