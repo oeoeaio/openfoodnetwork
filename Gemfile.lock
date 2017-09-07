@@ -680,6 +680,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
+  activemerchant (~> 1.63)
   acts-as-taggable-on (~> 3.4)
   andand
   angular-rails-templates (~> 0.2.0)
@@ -778,4 +779,4 @@ RUBY VERSION
    ruby 2.1.5p273
 
 BUNDLED WITH
-   1.15.2
+   1.15.3
