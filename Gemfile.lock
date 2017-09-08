@@ -7,9 +7,15 @@ GIT
       activemodel (~> 3.0)
 
 GIT
-  remote: git://github.com/coopdevs/spree.git
-  revision: eaca0c4351383515abcb4aa613838ef773905a96
-  branch: spree-upgrade-step-6
+  remote: git://github.com/jeremydurham/custom-err-msg.git
+  revision: 3a8ec9dddc7a5b0aab7c69a6060596de300c68f4
+  specs:
+    custom_error_message (1.1.1)
+
+GIT
+  remote: git://github.com/oeoeaio/spree.git
+  revision: c2519e2e29f7bc1d5944f686943ee251520ed082
+  branch: remove-duplicate-kaminari
   specs:
     spree (1.3.99)
       spree_api (= 1.3.99)
@@ -66,12 +72,6 @@ GIT
       stringex (~> 1.3.2)
     spree_sample (1.3.99)
       spree_core (= 1.3.99)
-
-GIT
-  remote: git://github.com/jeremydurham/custom-err-msg.git
-  revision: 3a8ec9dddc7a5b0aab7c69a6060596de300c68f4
-  specs:
-    custom_error_message (1.1.1)
 
 GIT
   remote: git://github.com/openfoodfoundation/better_spree_paypal_express.git
@@ -778,4 +778,4 @@ RUBY VERSION
    ruby 2.1.5p273
 
 BUNDLED WITH
-   1.15.3
+   1.15.4
