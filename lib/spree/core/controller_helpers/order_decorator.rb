@@ -18,7 +18,7 @@ Spree::Core::ControllerHelpers::Order.class_eval do
   # Do not attempt to merge incomplete and current orders. Instead, destroy the incomplete orders.
   def set_current_order
     if user = try_spree_current_user
-      last_incomplete_order = user.last_incomplete_spree_order
+      last_incomplete_order = OpenFoodNetwork::IncompleteOrders.new(user).last
 
       if session[:order_id].nil? && last_incomplete_order
         session[:order_id] = last_incomplete_order.id
