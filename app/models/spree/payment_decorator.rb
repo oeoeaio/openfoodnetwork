@@ -5,6 +5,11 @@ module Spree
     after_save :ensure_correct_adjustment, :update_order
 
     def ensure_correct_adjustment
+      # This guard clause is part of a fix for:
+      # https://github.com/openfoodfoundation/openfoodnetwork/issues/1837
+      # Application of PayPal transaction fees are handled in CheckoutController
+      return if payment_method.kind_of?(Spree::Gateway::PayPalExpress)
+
       # Don't charge for invalid payments.
       # PayPalExpress always creates a payment that is invalidated later.
       # Unknown: What about failed payments?
@@ -80,6 +85,5 @@ module Spree
       refund_amount ||= credit_allowed >= order.outstanding_balance.abs ? order.outstanding_balance.abs : credit_allowed.abs
       refund_amount.to_f
     end
-
   end
 end

@@ -1,4 +1,5 @@
 require 'open_food_network/last_used_address'
+require 'open_food_network/paypal_transaction_fee_applicator'
 
 class CheckoutController < Spree::CheckoutController
   layout 'darkswarm'
@@ -18,6 +19,7 @@ class CheckoutController < Spree::CheckoutController
   end
 
   def update
+    store_paypal_payment_method
     if @order.update_attributes(object_params)
       check_order_for_phantom_fees
       fire_event('spree.checkout.update')
@@ -193,13 +195,26 @@ class CheckoutController < Spree::CheckoutController
     end
   end
 
-  def redirect_to_paypal_express_form_if_needed
+  def store_paypal_payment_method
     return unless params[:order][:payments_attributes]
 
     payment_method = Spree::PaymentMethod.find(params[:order][:payments_attributes].first[:payment_method_id])
     return unless payment_method.kind_of?(Spree::Gateway::PayPalExpress)
 
-    render json: {path: spree.paypal_express_url(payment_method_id: payment_method.id)}, status: 200
+    # A new payment is created by spree_paypal_express in PayPalController#confirm
+    # so we don't need these attributes to create a method here in #update
+    params[:order].delete(:payments_attributes)
+
+    @paypal_payment_method = payment_method
+  end
+
+  def redirect_to_paypal_express_form_if_needed
+    return unless @paypal_payment_method
+
+    fee_applicator = OpenFoodNetwork::PayPalTransactionFeeApplicator.new(@order, @paypal_payment_method)
+    fee_applicator.apply_fees
+
+    render json: {path: spree.paypal_express_url(payment_method_id: @paypal_payment_method.id)}, status: 200
     true
   end
 end
