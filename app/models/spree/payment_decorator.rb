@@ -9,7 +9,6 @@ module Spree
     def ensure_correct_adjustment
       # Don't charge for invalid payments.
       # PayPalExpress always creates a payment that is invalidated later.
-      # Unknown: What about failed payments?
       if state == "invalid"
         adjustment.andand.destroy
       elsif adjustment
