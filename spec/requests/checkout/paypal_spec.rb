@@ -1,12 +1,14 @@
 require 'spec_helper'
 
 describe "checking out an order with a paypal express payment method", type: :request do
+  include AuthenticationWorkflow
   include ShopWorkflow
 
+  let!(:user) { create(:user) }
   let!(:address) { create(:address) }
   let!(:shop) { create(:enterprise) }
   let!(:shipping_method) { create(:shipping_method, distributor_ids: [shop.id]) }
-  let!(:order) { create(:order, distributor: shop, ship_address: address.dup, bill_address: address.dup) }
+  let!(:order) { create(:order, distributor: shop, user: user, ship_address: address.dup, bill_address: address.dup) }
   let!(:shipment) { create(:shipment, order: order, shipping_method: shipping_method) }
   let!(:line_item) { create(:line_item, order: order, quantity: 3, price: 5.00) }
   let!(:payment_method) { Spree::Gateway::PayPalExpress.create!(name: "PayPalExpress", distributor_ids: [create(:distributor_enterprise).id], environment: Rails.env) }
@@ -31,6 +33,7 @@ describe "checking out an order with a paypal express payment method", type: :re
     expect(order.next).to be true # => delivery
     expect(order.next).to be true # => payment
     set_order order
+    quick_login_as(user)
 
     stub_request(:post, "https://api-3t.sandbox.paypal.com/2.0/")
     .to_return(:status => 200, :body => mocked_xml_response )

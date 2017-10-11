@@ -4,6 +4,7 @@ describe "checking out an order with a Stripe Connect payment method", type: :re
   include ShopWorkflow
   include AuthenticationWorkflow
 
+  let!(:user) { create(:user) }
   let!(:order_cycle) { create(:simple_order_cycle) }
   let!(:enterprise) { create(:distributor_enterprise) }
   let!(:exchange) { create(:exchange, order_cycle: order_cycle, sender: order_cycle.coordinator, receiver: enterprise, incoming: false, pickup_time: "Monday") }
@@ -28,9 +29,10 @@ describe "checking out an order with a Stripe Connect payment method", type: :re
 
   before do
     allow(Stripe).to receive(:api_key) { "sk_test_12345" }
-    order.update_attributes(distributor_id: enterprise.id, order_cycle_id: order_cycle.id)
+    order.update_attributes(distributor_id: enterprise.id, order_cycle_id: order_cycle.id, user_id: user.id)
     order.reload.update_totals
     set_order order
+    quick_login_as(user)
   end
 
   context "when a new card is submitted" do
