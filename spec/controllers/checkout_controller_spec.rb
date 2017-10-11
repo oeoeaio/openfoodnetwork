@@ -202,4 +202,56 @@ describe CheckoutController do
       spree_post :update, order: {payments_attributes: [{payment_method_id: payment_method.id}]}
     end
   end
+
+  describe "#update_failed" do
+    before do
+      controller.instance_variable_set(:@order, order)
+    end
+
+    it "clears the shipping address and restarts the checkout" do
+      expect(controller).to receive(:clear_ship_address)
+      expect(controller).to receive(:restart_checkout)
+      expect(controller).to receive(:respond_to)
+      controller.send(:update_failed)
+    end
+  end
+
+  describe "#restart_checkout" do
+    let!(:shipment_pending) { create(:shipment, order: order, state: 'pending') }
+    let!(:payment_checkout) { create(:payment, order: order, state: 'checkout') }
+    let!(:payment_failed) { create(:payment, order: order, state: 'failed') }
+
+    before do
+      controller.instance_variable_set(:@order, order.reload)
+    end
+
+    context "when the order is already in the 'cart' state" do
+      it "does nothing" do
+        expect(order).to_not receive(:restart_checkout!)
+        controller.send(:restart_checkout)
+      end
+    end
+
+    context "when the order is in a subsequent state" do
+      before do
+        order.update_attribute(:state, "payment")
+      end
+
+      # NOTE: at the time of writing, it was not possible to create a shipment with a state other than
+      # 'pending' when the order has not been completed, so this is not a case that requires testing.
+      it "resets the order state, and clears incomplete shipments and payments" do
+        expect(order).to receive(:restart_checkout!).and_call_original
+        expect(order.shipments.count).to be 1
+        expect(order.adjustments.shipping.count).to be 1
+        expect(order.payments.count).to be 2
+        expect(order.adjustments.payment_fee.count).to be 2
+        controller.send(:restart_checkout)
+        expect(order.reload.state).to eq 'cart'
+        expect(order.shipments.count).to be 0
+        expect(order.adjustments.shipping.count).to be 0
+        expect(order.payments.count).to be 1
+        expect(order.adjustments.payment_fee.count).to be 1
+      end
+    end
+  end
 end
