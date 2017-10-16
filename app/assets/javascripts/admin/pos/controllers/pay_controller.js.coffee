@@ -1,4 +1,5 @@
-angular.module("admin.pos").controller "PayController", ($scope, $http, CurrentOrder) ->
+angular.module("admin.pos").controller "PayController", ($scope, $http, CurrentOrder, PaymentMethods) ->
+  $scope.paymentMethods = PaymentMethods.all
   $scope.inProgress = false
   $scope.payment =
     amount: null
