@@ -78,7 +78,7 @@
           {{ paymentMethod.name }}
           %i.icon-ok{ ng: { show: "payment.payment_method_id == paymentMethod.id" } }
     .row
-      .small-6.columns
+      .small-6.columns.small-centered
         %a.button.fullwidth.red{ ng: { click: 'createPayment()', class: '{disabled: !payment.payment_method_id}', hide: 'inProgress' } }
           Pay Now
         %div{ ng: { show: 'inProgress' } }

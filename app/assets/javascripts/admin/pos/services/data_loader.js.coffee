@@ -1,4 +1,4 @@
-angular.module("admin.pos").factory "DataLoader", ($http, LineItems, Orders, Variants, Products) ->
+angular.module("admin.pos").factory "DataLoader", ($http, LineItems, Orders, Variants, Products, PaymentMethods) ->
   new class DataLoader
     data = null
 
@@ -13,6 +13,7 @@ angular.module("admin.pos").factory "DataLoader", ($http, LineItems, Orders, Var
         Orders.load(@data.orders)
         Products.load(@data.products)
         Variants.load(@data.variants)
+        PaymentMethods.load(@data.payment_methods)
 
         LineItems.linkToOrders(Orders.byID)
         LineItems.linkToVariants(Variants.byID)
