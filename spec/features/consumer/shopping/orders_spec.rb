@@ -73,7 +73,7 @@ feature "Order Management", js: true do
 
         # Deleting an item
         within "tr.variant-#{item2.variant.id}" do
-          click_link "delete_line_item_#{item2.id}"
+          find('td.cart-item-delete a').trigger('click')
         end
 
         expect(find(".order-total.grand-total")).to have_content "$35.00"

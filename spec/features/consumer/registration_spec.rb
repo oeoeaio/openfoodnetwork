@@ -181,6 +181,7 @@ feature "Registration", js: true do
       3.times do
         click_button "Login"
         break if page.has_selector? "div#loading", text: "Hold on a moment, we're logging you in"
+        break if page.has_content? content
       end
     end
     expect(page).to have_content content

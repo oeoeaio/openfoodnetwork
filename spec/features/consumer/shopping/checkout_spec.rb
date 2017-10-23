@@ -173,6 +173,7 @@ feature "As a consumer I want to check out my cart", js: true, retry: 3 do
           visit checkout_path
           fill_out_form
           toggle_payment
+          sleep 20
           choose stripe_pm.name
         end
 

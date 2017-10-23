@@ -120,7 +120,9 @@ feature "full-page cart", js: true do
 
         expect(page).to have_content item1.variant.name
         expect(page).to have_content item2.variant.name
-        page.find(".line-item-#{item1.id} td.bought-item-delete a").click
+        within "tr.line-item-#{item1.id}" do
+          find('td.bought-item-delete a').trigger('click')
+        end
         expect(page).to have_no_content item1.variant.name
         expect(page).to have_content item2.variant.name
 

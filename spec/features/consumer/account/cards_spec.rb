@@ -23,6 +23,7 @@ feature "Credit Cards", js: true do
     it "lists saved cards, shows interface for adding new cards" do
       visit "/account"
 
+      sleep 20
       click_link I18n.t('spree.users.show.tabs.cards')
 
       expect(page).to have_content I18n.t(:saved_cards)
