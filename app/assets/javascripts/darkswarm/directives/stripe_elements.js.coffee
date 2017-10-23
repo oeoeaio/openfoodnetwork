@@ -18,7 +18,7 @@ Darkswarm.directive "stripeElements", ($injector, StripeElements) ->
             color: '#5c5c5c'
             '::placeholder':
               color: '#6c6c6c'
-      card.mount('#card-element')
+      # card.mount('#card-element')
 
       # Elements validates user input as it is typed. To help your customers
       # catch mistakes, you should listen to change events on the card Element
