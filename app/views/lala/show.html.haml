@@ -1,0 +1,16 @@
+#card-element
+
+:coffee
+  $ ->
+    stripe = Stripe("some_token")
+    card = stripe.elements().create 'card',
+      hidePostalCode: true
+      style:
+        base:
+          fontFamily: "Roboto, Arial, sans-serif"
+          fontSize: '16px'
+          color: '#5c5c5c'
+          '::placeholder':
+            color: '#6c6c6c'
+
+    card.mount('#card-element')
