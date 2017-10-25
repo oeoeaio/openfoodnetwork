@@ -1,16 +1,19 @@
-#card-element
+#something{ ng: { controller: 'LalaCtrl' } }
+  %input#lala{ type: 'button', value: 'lalala', "ng-click" => "doIt()" }
+  #card-element
 
-:coffee
-  $ ->
-    stripe = Stripe("pk_test_O7sBoi1DL5Lrx8pj0n7uqlpp")
-    card = stripe.elements().create 'card',
-      hidePostalCode: true
-      style:
-        base:
-          fontFamily: "Roboto, Arial, sans-serif"
-          fontSize: '16px'
-          color: '#5c5c5c'
-          '::placeholder':
-            color: '#6c6c6c'
+  :coffee
+    Darkswarm.controller 'LalaCtrl', ($scope) ->
+      $scope.doIt = ->
+        stripe = Stripe("pk_test_O7sBoi1DL5Lrx8pj0n7uqlpp")
+        card = stripe.elements().create 'card',
+          hidePostalCode: true
+          style:
+            base:
+              fontFamily: "Roboto, Arial, sans-serif"
+              fontSize: '16px'
+              color: '#5c5c5c'
+              '::placeholder':
+                color: '#6c6c6c'
 
-    card.mount('#card-element')
+        card.mount('#card-element')
