@@ -7,7 +7,9 @@ feature "Lala", js: true do
 
   it "shows a card interface" do
     visit "/lala"
-
+    expect(page).to have_content "SHOPS"
+    expect(page).to have_content "MAP"
+    expect(page).to have_content "ABOUT"
     # Shows the interface for adding a card
     expect(page).to have_selector '#card-element.StripeElement'
   end
