@@ -111,7 +111,7 @@ group :test, :development do
   gem 'awesome_print'
   gem 'letter_opener'
   gem 'timecop'
-  gem 'poltergeist'
+  gem 'poltergeist', '>= 1.16.0'
   gem 'rspec-retry'
   gem 'json_spec'
   gem 'unicorn-rails'
