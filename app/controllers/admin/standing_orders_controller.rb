@@ -96,7 +96,6 @@ module Admin
       @payment_methods = Spree::PaymentMethod.for_distributor(@standing_order.shop).for_standing_orders
       @shipping_methods = Spree::ShippingMethod.for_distributor(@standing_order.shop)
       @order_cycles = OrderCycle.joins(:schedules).managed_by(spree_current_user)
-      @fee_calculator = fee_calculator
     end
 
     def fee_calculator
