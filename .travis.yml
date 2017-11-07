@@ -22,8 +22,10 @@ env:
     - CI_NODE_INDEX=3
     - CI_NODE_INDEX=4 KARMA="true" GITHUB_DEPLOY="true"
 
-before_install:
-  - ./script/upgrade_bundler.sh
+# Disable for now, rubygems seems to be installing
+# the latest version of bundler for us.
+# before_install:
+#   - ./script/upgrade_bundler.sh
 
 before_script:
   - cp config/database.travis.yml config/database.yml
