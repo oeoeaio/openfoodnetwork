@@ -54,20 +54,70 @@ module OpenFoodNetwork
       context "when a payment is present" do
         before { allow(updater).to receive(:payment) { payment } }
 
-        context "when the payment total doesn't match the outstanding balance on the order" do
-          before { allow(order).to receive(:outstanding_balance) { 5 } }
-          it "updates the payment total to reflect the outstanding balance" do
-            expect{updater.update!}.to change(payment, :amount).from(10).to(5)
+        context "when a credit card is not required" do
+          before do
+            allow(updater).to receive(:card_required?) { false }
+            expect(updater).to_not receive(:ensure_credit_card)
+          end
+
+          context "when the payment total doesn't match the outstanding balance on the order" do
+            before { allow(order).to receive(:outstanding_balance) { 5 } }
+            it "updates the payment total to reflect the outstanding balance" do
+              expect{updater.update!}.to change(payment, :amount).from(10).to(5)
+            end
+          end
+
+          context "when the payment total matches the outstanding balance on the order" do
+            before { allow(order).to receive(:outstanding_balance) { 10 } }
+
+            it "does nothing" do
+              expect{updater.update!}.to_not change(payment, :amount).from(10)
+            end
           end
         end
 
-        context "when the payment total matches the outstanding balance on the order" do
-          before { allow(order).to receive(:outstanding_balance) { 10 } }
+        context "when a credit card is required" do
+          before do
+            allow(updater).to receive(:card_required?) { true }
+          end
 
-          it "does nothing" do
-            expect{updater.update!}.to_not change(payment, :amount).from(10)
+          context "but none are available" do
+            before { expect(updater).to receive(:ensure_credit_card).and_raise(MissingCardError) }
+
+            it "does not update the payment, sends an payment failure email" do
+              expect(payment).to_not receive(:update_attributes)
+              expect(updater).to receive(:send_payment_failure_email)
+              updater.update!
+            end
+          end
+
+          context "and a credit card is added without errors" do
+            before { expect(updater).to receive(:ensure_credit_card) }
+
+            context "when the payment total doesn't match the outstanding balance on the order" do
+              before { allow(order).to receive(:outstanding_balance) { 5 } }
+              it "updates the payment total to reflect the outstanding balance" do
+                expect{updater.update!}.to change(payment, :amount).from(10).to(5)
+              end
+            end
+
+            context "when the payment total matches the outstanding balance on the order" do
+              before { allow(order).to receive(:outstanding_balance) { 10 } }
+
+              it "does nothing" do
+                expect{updater.update!}.to_not change(payment, :amount).from(10)
+              end
+            end
           end
         end
+      end
+    end
+
+    describe "#ensure_credit_card" do
+      let(:payment) { instance_double(:payment) }
+
+      context "when the payment" do
+        it {binding.pry}
       end
     end
   end
