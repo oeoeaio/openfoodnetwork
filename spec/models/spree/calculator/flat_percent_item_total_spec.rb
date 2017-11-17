@@ -1,6 +1,6 @@
 require 'spec_helper'
 
- describe Spree::Calculator::FlatPercentItemTotal do
+describe Spree::Calculator::FlatPercentItemTotal do
   let(:calculator) { Spree::Calculator::FlatPercentItemTotal.new }
   let(:line_item) { instance_double(Spree::LineItem, amount: 10) }
 
