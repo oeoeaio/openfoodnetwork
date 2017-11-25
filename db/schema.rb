@@ -37,6 +37,16 @@ ActiveRecord::Schema.define(:version => 20180204235108) do
   add_index "adjustment_metadata", ["adjustment_id"], :name => "index_adjustment_metadata_on_adjustment_id"
   add_index "adjustment_metadata", ["enterprise_id"], :name => "index_adjustment_metadata_on_enterprise_id"
 
+  create_table "alterations", :force => true do |t|
+    t.integer  "target_order_id",  :null => false
+    t.integer  "working_order_id", :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  add_index "alterations", ["target_order_id"], :name => "index_alterations_on_target_order_id", :unique => true
+  add_index "alterations", ["working_order_id"], :name => "index_alterations_on_working_order_id", :unique => true
+
   create_table "billable_periods", :force => true do |t|
     t.integer  "enterprise_id"
     t.integer  "owner_id"
@@ -1196,6 +1206,9 @@ ActiveRecord::Schema.define(:version => 20180204235108) do
 
   add_foreign_key "adjustment_metadata", "enterprises", name: "adjustment_metadata_enterprise_id_fk"
   add_foreign_key "adjustment_metadata", "spree_adjustments", name: "adjustment_metadata_adjustment_id_fk", column: "adjustment_id", dependent: :delete
+
+  add_foreign_key "alterations", "spree_orders", name: "alterations_target_order_id_fk", column: "target_order_id"
+  add_foreign_key "alterations", "spree_orders", name: "alterations_working_order_id_fk", column: "working_order_id"
 
   add_foreign_key "billable_periods", "account_invoices", name: "billable_periods_account_invoice_id_fk"
   add_foreign_key "billable_periods", "enterprises", name: "bill_items_enterprise_id_fk"
