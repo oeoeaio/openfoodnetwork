@@ -6,6 +6,11 @@ describe Alteration do
     it { expect(subject).to belong_to :working_order }
   end
 
+  describe "validations" do
+    it { expect(subject).to validate_presence_of(:target_order) }
+    it { expect(subject).to validate_presence_of(:working_order) }
+  end
+
   describe "#initialize_working_order" do
     let(:enterprise) { create(:enterprise) }
     let(:order_cycle) { create(:simple_order_cycle, coordinator: enterprise) }

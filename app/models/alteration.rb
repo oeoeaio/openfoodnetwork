@@ -2,6 +2,9 @@ class Alteration < ActiveRecord::Base
   belongs_to :target_order, class_name: 'Spree::Order'
   belongs_to :working_order, class_name: 'Spree::Order'
 
+  validates :target_order, presence: true
+  validates :working_order, presence: true
+
   def initialize_working_order
     self.working_order = Spree::Order.create(working_attrs)
     target_order.line_items.each do |li|
