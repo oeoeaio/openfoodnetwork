@@ -4,6 +4,7 @@ class Alteration < ActiveRecord::Base
 
   validates :target_order, presence: true
   validates :working_order, presence: true
+  validate :target_order_must_be_complete
 
   def initialize_working_order
     self.working_order = Spree::Order.create(working_attrs)
@@ -22,5 +23,11 @@ class Alteration < ActiveRecord::Base
       "distributor_id",
       "order_cycle_id"
     )
+  end
+
+  def target_order_must_be_complete
+    return unless target_order.present?
+    return if target_order.complete?
+    errors.add(:target_order, :incomplete)
   end
 end

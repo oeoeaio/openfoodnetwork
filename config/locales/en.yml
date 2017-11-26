@@ -66,6 +66,10 @@ en:
         email: Customer E-Mail
     errors:
       models:
+        alteration:
+          attributes:
+            target_order:
+              incomplete: must be complete before it can be altered
         spree/user:
           attributes:
             email:

@@ -9,6 +9,20 @@ describe Alteration do
   describe "validations" do
     it { expect(subject).to validate_presence_of(:target_order) }
     it { expect(subject).to validate_presence_of(:working_order) }
+
+    describe "validating that target order is complete" do
+      let(:alteration) { Alteration.new(target_order: order, working_order: create(:order)) }
+
+      context "when the target_order is incomplete" do
+        let(:order) { create(:order) }
+        it { expect(alteration).to_not be_valid }
+      end
+
+      context "when the target order is complete" do
+        let(:order) { create(:completed_order_with_totals) }
+        it { expect(alteration).to be_valid }
+      end
+    end
   end
 
   describe "#initialize_working_order" do
