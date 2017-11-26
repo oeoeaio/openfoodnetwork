@@ -10,7 +10,7 @@ class AlterationsController < BaseController
       redirect_to enterprise_shop_path(current_distributor)
     else
       flash[:error] = alteration.errors.full_messages.join(", ")
-      redirect_to spree.order_url(alteration.target_order)
+      redirect_to spree.order_path(alteration.target_order)
     end
   end
 end
