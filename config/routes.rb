@@ -53,6 +53,8 @@ Openfoodnetwork::Application.routes.draw do
     end
   end
 
+  resources :alterations, only: [:create]
+
   namespace :stripe do
     resources :callbacks, only: [:index]
     resources :webhooks, only: [:create]

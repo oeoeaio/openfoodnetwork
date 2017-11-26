@@ -64,6 +64,11 @@ class AbilityDecorator
     can [:destroy], Spree::CreditCard do |credit_card|
       credit_card.user == user
     end
+
+    can [:create], Alteration do |alteration|
+      return false unless alteration.target_order
+      alteration.target_order.user == user
+    end
   end
 
   # New users can create an enterprise, and gain other permissions from doing this.
