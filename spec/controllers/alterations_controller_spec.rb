@@ -28,23 +28,37 @@ describe AlterationsController, type: :controller do
       context "and they own the target order" do
         before { order.user = user; order.save! }
 
-        context "when no errors are encountered while creating the alteration" do
+        context "when an alteration already exists for the target order" do
           let(:order) { create(:completed_order_with_totals, distributor: enterprise) }
+          let(:working_order) { create(:order, distributor: enterprise) }
+          let!(:alteration) { Alteration.create(target_order: order, working_order: working_order) }
 
-          it "creates an OrderAmendment, sets the current order and redirects to the relevant shop" do
-            expect{ post :create, params }.to change(Alteration, :count).by(1)
-            alteration = Alteration.last
-            expect(controller.current_order).to eq alteration.working_order
+          it "sets the current order and redirects to the relevant shop, but does not create an Alteration" do
+            expect{ post :create, params }.to_not change(Alteration, :count)
+            expect(controller.current_order).to eq working_order
             expect(response).to redirect_to enterprise_shop_path(enterprise)
           end
         end
 
-        context "when an error is encountered while creating the alteration" do
-          it "creates an Alteration, sets the current order and redirects to the relevant shop" do
-            expect{ post :create, params }.to_not change(Alteration, :count)
-            expect(controller.current_order).to be nil
-            expect(flash[:error]).to include I18n.t('activerecord.errors.models.alteration.attributes.target_order.incomplete')
-            expect(response).to redirect_to spree.order_path(order)
+        context "when no alteration already exists for the target order" do
+          context "when no errors are encountered while creating the alteration" do
+            let(:order) { create(:completed_order_with_totals, distributor: enterprise) }
+
+            it "creates an Alteration, sets the current order and redirects to the relevant shop" do
+              expect{ post :create, params }.to change(Alteration, :count).by(1)
+              alteration = Alteration.last
+              expect(controller.current_order).to eq alteration.working_order
+              expect(response).to redirect_to enterprise_shop_path(enterprise)
+            end
+          end
+
+          context "when an error is encountered while creating the alteration" do
+            it "creates an Alteration, sets the current order and redirects to the relevant shop" do
+              expect{ post :create, params }.to_not change(Alteration, :count)
+              expect(controller.current_order).to be nil
+              expect(flash[:error]).to include I18n.t('activerecord.errors.models.alteration.attributes.target_order.incomplete')
+              expect(response).to redirect_to spree.order_path(order)
+            end
           end
         end
       end
