@@ -69,6 +69,8 @@ en:
           attributes:
             email:
               taken: "There's already an account for this email. Please login or reset your password."
+        order_cycle:
+          open_before_close: The open date must be before the close date.
   devise:
     failure:
       invalid: |

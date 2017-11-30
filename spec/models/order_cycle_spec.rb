@@ -11,6 +11,11 @@ describe OrderCycle do
     oc.should_not be_valid
   end
 
+  it "is not valid when orders close before they open" do
+    oc = build(:simple_order_cycle, orders_open_at: 1.day.ago, orders_close_at: 2.days.ago)
+    expect(oc).to_not be_valid
+  end
+
   it "has a coordinator and associated fees" do
     oc = create(:simple_order_cycle)
 

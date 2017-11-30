@@ -13,9 +13,9 @@ module Admin
     describe "#index" do
       describe "when the user manages a coordinator" do
         let!(:coordinator) { create(:distributor_enterprise, owner: distributor_owner) }
-        let!(:oc1) { create(:simple_order_cycle, orders_close_at: 60.days.ago ) }
-        let!(:oc2) { create(:simple_order_cycle, orders_close_at: 40.days.ago ) }
-        let!(:oc3) { create(:simple_order_cycle, orders_close_at: 20.days.ago ) }
+        let!(:oc1) { create(:simple_order_cycle, orders_open_at: 67.days.ago, orders_close_at: 60.days.ago ) }
+        let!(:oc2) { create(:simple_order_cycle, orders_open_at: 47.days.ago, orders_close_at: 40.days.ago ) }
+        let!(:oc3) { create(:simple_order_cycle, orders_open_at: 27.days.ago, orders_close_at: 20.days.ago ) }
 
         context "where show_more is set to true" do
           it "loads all order cycles" do
@@ -92,6 +92,31 @@ module Admin
       end
     end
 
+    describe "create" do
+      let(:hub) { create(:distributor_enterprise) }
+      let(:params) { { format: :json, order_cycle: { name: "NeW oC", coordinator_id: hub.id, orders_open_at: 1.day.ago, orders_close_at: 1.day.from_now } } }
+
+      before { allow(controller).to receive(:spree_current_user) { hub.owner } }
+
+      context "when no errors are encountered while updating" do
+        it "returns success: true" do
+          spree_put :create, params
+          json_reponse = JSON.parse(response.body)
+          expect(json_reponse['success']).to be true
+        end
+      end
+
+      context "when an error is encountered while updating" do
+        before { params[:order_cycle][:orders_close_at] = 2.days.ago }
+
+        it "returns the errors as json" do
+          spree_put :create, params
+          json_reponse = JSON.parse(response.body)
+          expect(json_reponse['errors']).to include I18n.t('activerecord.errors.models.order_cycle.open_before_close')
+        end
+      end
+    end
+
     describe "update" do
       let(:order_cycle) { create(:simple_order_cycle) }
 
@@ -154,6 +179,14 @@ module Admin
             spree_put :update, {id: order_cycle.id}.merge(params)
             Exchange.where(order_cycle_id: order_cycle).with_variant(v).should be_empty
           end
+        end
+      end
+
+      context "when an error is encountered while updating" do
+        it "returns the errors as json" do
+          spree_put :update, format: :json, id: order_cycle.id, order_cycle: { orders_open_at: 1.day.ago, orders_close_at: 2.days.ago }
+          json_reponse = JSON.parse(response.body)
+          expect(json_reponse['errors']).to include I18n.t('activerecord.errors.models.order_cycle.open_before_close')
         end
       end
     end

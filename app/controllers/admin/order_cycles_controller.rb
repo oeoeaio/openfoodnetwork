@@ -49,8 +49,8 @@ module Admin
           format.html { redirect_to admin_order_cycles_path }
           format.json { render :json => {:success => true} }
         else
-          format.html
-          format.json { render :json => {:success => false} }
+          errors = @order_cycle.errors.full_messages
+          format.json { render json: { errors: errors } }
         end
       end
     end
@@ -68,7 +68,8 @@ module Admin
           format.html { redirect_to main_app.edit_admin_order_cycle_path(@order_cycle) }
           format.json { render :json => {:success => true}  }
         else
-          format.json { render :json => {:success => false} }
+          errors = @order_cycle.errors.full_messages
+          format.json { render json: { errors: errors } }
         end
       end
     end

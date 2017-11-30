@@ -12,6 +12,7 @@ class OrderCycle < ActiveRecord::Base
   attr_accessor :incoming_exchanges, :outgoing_exchanges
 
   validates_presence_of :name, :coordinator_id
+  validate :orders_open_at_must_be_before_orders_close_at
 
   after_save :refresh_products_cache
 
@@ -268,5 +269,11 @@ class OrderCycle < ActiveRecord::Base
     product.has_variants? &&
       distributed_variants.include?(product.master) &&
       (product.variants & distributed_variants).empty?
+  end
+
+  def orders_open_at_must_be_before_orders_close_at
+    return unless orders_open_at && orders_close_at
+    return if orders_open_at < orders_close_at
+    errors.add(:base, :open_before_close)
   end
 end
