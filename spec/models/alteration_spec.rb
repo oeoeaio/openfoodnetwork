@@ -8,7 +8,6 @@ describe Alteration do
 
   describe "validations" do
     it { expect(subject).to validate_presence_of(:target_order) }
-    it { expect(subject).to validate_presence_of(:working_order) }
 
     describe "validating that target order is complete" do
       let(:alteration) { Alteration.new(target_order: order, working_order: create(:order)) }
@@ -25,18 +24,16 @@ describe Alteration do
     end
   end
 
-  describe "#initialize_working_order" do
+  describe "before_create callback" do
     let(:enterprise) { create(:enterprise) }
     let(:order_cycle) { create(:simple_order_cycle, coordinator: enterprise) }
     let(:target_order) { create(:completed_order_with_totals, distributor: enterprise, order_cycle: order_cycle) }
     let!(:alteration) { Alteration.new(target_order: target_order) }
-    let(:working_order) { alteration.working_order }
-
-    before do
-      alteration.initialize_working_order
-    end
 
     it "initializes a new working order and copies appropriate attributes and line items across" do
+      expect(alteration.working_order).to be nil
+      alteration.save!
+      working_order = alteration.working_order
       expect(working_order).to be_a Spree::Order
       expect(working_order.line_items.count).to eq target_order.line_items.count
       expect(working_order.order_cycle).to eq order_cycle

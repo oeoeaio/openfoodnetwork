@@ -16,10 +16,7 @@ class AlterationsController < BaseController
 
   def find_or_initialize_alteration
     @alteration = Alteration.find_by_target_order_id(params[:target_order_id])
-    unless @alteration
-      @alteration = Alteration.new(target_order_id: params[:target_order_id])
-      @alteration.initialize_working_order
-    end
+    @alteration ||= Alteration.new(target_order_id: params[:target_order_id])
     authorize! :create, @alteration
   end
 end

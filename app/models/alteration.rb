@@ -2,9 +2,12 @@ class Alteration < ActiveRecord::Base
   belongs_to :target_order, class_name: 'Spree::Order'
   belongs_to :working_order, class_name: 'Spree::Order'
 
+  before_create :initialize_working_order, unless: :working_order
+
   validates :target_order, presence: true
-  validates :working_order, presence: true
   validate :target_order_must_be_complete
+
+  private
 
   def initialize_working_order
     self.working_order = Spree::Order.create(working_attrs)
@@ -15,8 +18,6 @@ class Alteration < ActiveRecord::Base
       )
     end
   end
-
-  private
 
   def working_attrs
     target_order.attributes.slice(
