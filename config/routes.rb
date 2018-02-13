@@ -53,7 +53,9 @@ Openfoodnetwork::Application.routes.draw do
     end
   end
 
-  resources :alterations, only: [:create]
+  resources :alterations, only: [:create] do
+    put :confirm, on: :member
+  end
 
   namespace :stripe do
     resources :callbacks, only: [:index]

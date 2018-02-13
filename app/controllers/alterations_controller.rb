@@ -1,6 +1,7 @@
 class AlterationsController < BaseController
   layout 'darkswarm'
 
+  # POST /alterations
   def create
     find_or_initialize_alteration
     if @alteration.save
@@ -9,6 +10,19 @@ class AlterationsController < BaseController
     else
       flash[:error] = @alteration.errors.full_messages.join(", ")
       redirect_to spree.order_path(@alteration.target_order)
+    end
+  end
+
+  # PUT /alterations/:id/confirm
+  def confirm
+    @alteration = Alteration.find(params[:id])
+    authorize! :confirm, @alteration
+
+    if @alteration.confirm!
+      redirect_to spree.order_path(@alteration.target_order)
+    else
+      flash[:error] = @alteration.errors.full_messages.join(", ")
+      redirect_to enterprise_shop_path(@alteration.target_order.distributor)
     end
   end
 
