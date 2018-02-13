@@ -996,6 +996,10 @@ en:
   card_could_not_be_saved: card could not be saved
   spree_gateway_error_flash_for_checkout: "There was a problem with your payment information: %{error}"
 
+  alterations:
+    destroy:
+      failure: "Could not cancel the alteration"
+
   # Printable Invoice Columns
   invoice_billing_address: "Billing address:"
   invoice_column_tax: "GST"

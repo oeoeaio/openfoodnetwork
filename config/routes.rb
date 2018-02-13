@@ -53,7 +53,7 @@ Openfoodnetwork::Application.routes.draw do
     end
   end
 
-  resources :alterations, only: [:create] do
+  resources :alterations, only: [:create, :destroy] do
     put :confirm, on: :member
   end
 

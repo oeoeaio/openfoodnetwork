@@ -125,4 +125,62 @@ describe AlterationsController, type: :controller do
       end
     end
   end
+
+  describe "#destroy" do
+    let(:params) { { id: 1 } }
+    let(:enterprise) { create(:enterprise) }
+    let(:order) { build(:completed_order_with_totals, distributor: enterprise) }
+    let(:alteration) { create(:alteration, target_order: order) }
+
+    before do
+      allow(Alteration).to receive(:find) { alteration }
+    end
+
+    context "when no user logged in" do
+      it "redirects to the login path" do
+        delete :destroy, params
+        expect(response).to redirect_to spree.login_path
+      end
+    end
+
+    context "when a user is logged in" do
+      let(:user) { create(:user) }
+
+      before do
+        allow(controller).to receive(:spree_current_user) { user }
+      end
+
+      context "but they do not own the target order" do
+        it "redirects to unauthorized" do
+          delete :destroy, params
+          expect(response).to redirect_to spree.unauthorized_path
+        end
+      end
+
+      context "and they own the target order" do
+        before do
+          order.update_attribute(:user_id, user.id)
+        end
+
+        context "when the destroy action succeeds" do
+          it "redirects to the order confirmation page" do
+            delete :destroy, params
+            expect(response).to redirect_to spree.order_path(order)
+          end
+        end
+
+        context "when the destroy action fails" do
+          before do
+            allow(alteration).to receive(:destroy) { false }
+          end
+
+          it "adds a flash message and redirects to the enterprise shop path" do
+            delete :destroy, params
+            expect(flash[:error]).to eq I18n.t('alterations.destroy.failure')
+            expect(response).to redirect_to enterprise_shop_path(enterprise)
+          end
+        end
+      end
+    end
+  end
 end

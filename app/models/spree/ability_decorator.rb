@@ -65,7 +65,7 @@ class AbilityDecorator
       credit_card.user == user
     end
 
-    can [:create, :confirm], Alteration do |alteration|
+    can [:create, :confirm, :destroy], Alteration do |alteration|
       return false unless alteration.target_order
       alteration.target_order.user == user
     end

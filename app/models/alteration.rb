@@ -1,6 +1,6 @@
 class Alteration < ActiveRecord::Base
   belongs_to :target_order, class_name: 'Spree::Order'
-  belongs_to :working_order, class_name: 'Spree::Order'
+  belongs_to :working_order, class_name: 'Spree::Order', dependent: :destroy
 
   before_create :initialize_working_order, unless: :working_order
 

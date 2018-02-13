@@ -26,6 +26,19 @@ class AlterationsController < BaseController
     end
   end
 
+  # DELETE /alterations/:id
+  def destroy
+    @alteration = Alteration.find(params[:id])
+    authorize! :destroy, @alteration
+
+    if @alteration.destroy
+      redirect_to spree.order_path(@alteration.target_order)
+    else
+      flash[:error] = t("alterations.destroy.failure")
+      redirect_to enterprise_shop_path(@alteration.target_order.distributor)
+    end
+  end
+
   private
 
   def find_or_initialize_alteration
