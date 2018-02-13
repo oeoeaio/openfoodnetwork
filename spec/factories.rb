@@ -425,6 +425,10 @@ FactoryGirl.define do
     stripe_user_id "abc123"
     stripe_publishable_key "xyz456"
   end
+
+  factory :alteration do
+    target_order { build(:completed_order_with_totals) }
+  end
 end
 
 

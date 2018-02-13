@@ -7,6 +7,12 @@ class Alteration < ActiveRecord::Base
   validates :target_order, presence: true
   validate :target_order_must_be_complete
 
+  def confirm!
+    working_order.line_items.all? do |line_item|
+      create_or_update_item_from(line_item)
+    end
+  end
+
   private
 
   def initialize_working_order
@@ -30,5 +36,16 @@ class Alteration < ActiveRecord::Base
     return unless target_order.present?
     return if target_order.complete?
     errors.add(:target_order, :incomplete)
+  end
+
+  def create_or_update_item_from(line_item)
+    variant_id = line_item.variant_id
+    target_item = find_or_initialize_item_for(variant_id)
+    target_item.update_attributes(line_item.attributes.slice("price", "quantity"))
+  end
+
+  def find_or_initialize_item_for(variant_id)
+    existing = target_order.line_items.find_by_variant_id(variant_id)
+    existing || target_order.line_items.new(variant_id: variant_id)
   end
 end
