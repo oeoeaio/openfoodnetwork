@@ -8,9 +8,8 @@ class Alteration < ActiveRecord::Base
   validate :target_order_must_be_complete
 
   def confirm!
-    working_order.line_items.all? do |line_item|
-      create_or_update_item_from(line_item)
-    end
+    remove_missing_items
+    create_or_update_items
   end
 
   private
@@ -36,6 +35,24 @@ class Alteration < ActiveRecord::Base
     return unless target_order.present?
     return if target_order.complete?
     errors.add(:target_order, :incomplete)
+  end
+
+  def remove_missing_items
+    missing_variants.find_each do |variant|
+      target_order.remove_variant(variant)
+    end
+  end
+
+  def missing_variants
+    target = target_order.line_items.pluck(:variant_id)
+    working = working_order.line_items.pluck(:variant_id)
+    Spree::Variant.where(id: target - working)
+  end
+
+  def create_or_update_items
+    working_order.line_items.all? do |line_item|
+      create_or_update_item_from(line_item)
+    end
   end
 
   def create_or_update_item_from(line_item)

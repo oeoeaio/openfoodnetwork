@@ -47,7 +47,7 @@ describe Alteration do
     let(:target_order) { create(:completed_order_with_totals) }
     let!(:alteration) { create(:alteration, target_order: target_order, working_order: working_order) }
 
-    context "for variants that already exist" do
+    context "for variants on the working order that already exist on the target order" do
       let(:variant_id) { target_order.line_items.first.variant_id }
       let!(:working_line_item) { working_order.line_items.create(variant_id: variant_id, price: 1.23, quantity: 5) }
 
@@ -59,15 +59,28 @@ describe Alteration do
       end
     end
 
-    context "for variants that do not already exist" do
-      let(:variant) { create(:variant, on_hand: 12) }
-      let!(:working_line_item) { working_order.line_items.create(variant_id: variant.id, price: 4.56, quantity: 7) }
+    context "for variants on the working order that do not exist on the target order" do
+      let(:variant1) { target_order.line_items.first.variant }
+      let(:variant2) { create(:variant, on_hand: 12) }
+      let!(:working_line_item1) { working_order.line_items.create(variant_id: variant1.id)}
+      let!(:working_line_item2) { working_order.line_items.create(variant_id: variant2.id, price: 4.56, quantity: 7) }
 
       it "updates the price and quantity fields" do
         expect{ alteration.confirm! }.to change(Spree::LineItem, :count).by(1)
-        line_item = target_order.line_items.find_by_variant_id(variant.id)
+        line_item = target_order.line_items.find_by_variant_id(variant2.id)
         expect(line_item.quantity).to eq 7
         expect(line_item.price).to eq 4.56
+      end
+    end
+
+
+    context "for variants on the target order that do not exist on the working order" do
+      let!(:variant) { target_order.line_items.first.variant }
+
+      it "removes such variants from the target order as well" do
+        expect{ alteration.confirm! }.to change(Spree::LineItem, :count).by(-1)
+        line_item = target_order.line_items.find_by_variant_id(variant.id)
+        expect(line_item).to be nil
       end
     end
   end
