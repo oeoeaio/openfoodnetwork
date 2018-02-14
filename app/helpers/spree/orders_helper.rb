@@ -34,11 +34,20 @@ module Spree
     end
 
     def shop_changeable_orders_alert_html
+      return editing_alert_html if @alteration
       return "" unless changeable_orders.any?
       t(:shop_changeable_orders_alert_html,
         count: changeable_orders.count,
         path: changeable_orders_link_path,
         order: changeable_orders.first.number,
+        shop: current_distributor.name,
+        oc_close: l(current_order_cycle.orders_close_at, format: "%A, %b %d, %Y @ %H:%M"))
+    end
+
+    def editing_alert_html
+      t(:shop_changeable_orders_editing_alert_html,
+        path: spree.order_path(@alteration.target_order),
+        order: @alteration.target_order.number,
         shop: current_distributor.name,
         oc_close: l(current_order_cycle.orders_close_at, format: "%A, %b %d, %Y @ %H:%M"))
     end

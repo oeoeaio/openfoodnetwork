@@ -38,6 +38,7 @@ class ShopController < BaseController
   end
 
   def changeable_orders_alert
+    @alteration = Alteration.find_by_working_order_id(current_order)
     render layout: false
   end
 
