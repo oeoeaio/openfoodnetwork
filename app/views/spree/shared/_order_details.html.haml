@@ -89,6 +89,9 @@
     - if order.changes_allowed?
       .alert-box.order-summary{ "ofn-inline-alert" => true, "ng-show" => "visible" }
         = t(:orders_changeable_orders_alert_html, oc_close: l(order.order_cycle.orders_close_at, format: "%b %d, %Y %H:%M"))
+        = link_to main_app.alterations_path(target_order_id: order.id), method: :post, :class => "button primary small" do
+          %i.ofn-i_007-caret-right
+          = t('orders_amend_this_order')
         %a.close{ "ng-click" => "close()" } &times;
 
     = form_for order, html: {id: 'update-order', name: 'update_order_form' } do |order_form|
