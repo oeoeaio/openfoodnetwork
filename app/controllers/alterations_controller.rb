@@ -6,7 +6,7 @@ class AlterationsController < BaseController
     find_or_initialize_alteration
     if @alteration.save
       session[:order_id] = @alteration.working_order_id
-      redirect_to enterprise_shop_path(current_distributor)
+      redirect_to enterprise_shop_path(@alteration.target_order.distributor)
     else
       flash[:error] = @alteration.errors.full_messages.join(", ")
       redirect_to spree.order_path(@alteration.target_order)
