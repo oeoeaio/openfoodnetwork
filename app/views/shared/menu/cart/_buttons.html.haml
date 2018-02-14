@@ -1,0 +1,5 @@
+.buttons.text-right
+  %a.button.secondary.tiny.add_to_cart{ href: cart_path, type: :submit, "ng-disabled" => "Cart.dirty || Cart.empty()", "ng-class" => "{ dirty: Cart.dirty }" }
+    = "{{ Cart.dirty ? '#{t(:cart_updating)}' : (Cart.empty() ? '#{t(:cart_empty)}' : '#{t(:cart_edit)}' ) }}"
+  %a.button.primary.tiny{href: checkout_path, "ng-disabled" => "Cart.dirty || Cart.empty()"}
+    = t '.checkout'

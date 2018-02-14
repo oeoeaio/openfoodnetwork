@@ -1,0 +1,26 @@
+%table
+  %tr.product-cart{"ng-repeat" => "line_item in Cart.line_items", "id" => "cart-variant-{{ line_item.variant.id }}"}
+    %td
+      %small
+        %strong
+          {{ line_item.variant.extended_name }}
+    %td.text-right
+      %small
+        %span.quantity {{ line_item.quantity }}
+        %i.ofn-i_009-close
+        %span.price {{ line_item.variant.price_with_fees | localizeCurrency }}
+
+    %td
+      %small
+        \=
+        %strong
+          .total-price.right {{ line_item.total_price | localizeCurrency }}
+
+%table{"ng-show" => "Cart.line_items.length > 0"}
+  %tr.total-cart
+    %td
+      %em
+        = t 'total'
+        \:
+    %td.text-right
+      %strong {{ Cart.total()  | localizeCurrency }}
