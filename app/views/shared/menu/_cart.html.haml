@@ -12,8 +12,13 @@
       %h5
         = t 'cart_headline'
 
-      = render 'shared/menu/cart/buttons'
-      = render 'shared/menu/cart/items'
-      = render 'shared/menu/cart/buttons'
-      - if order_changes_allowed?
-        = render 'shared/menu/cart/finalised_items'
+      %div{ ng: { show: 'Alteration' } }
+        = render 'shared/menu/alteration/buttons'
+        = render 'shared/menu/cart/items'
+        = render 'shared/menu/alteration/buttons'
+      %div{ ng: { hide: 'Alteration' } }
+        = render 'shared/menu/cart/buttons'
+        = render 'shared/menu/cart/items'
+        = render 'shared/menu/cart/buttons'
+        - if order_changes_allowed?
+          = render 'shared/menu/cart/finalised_items'

@@ -81,6 +81,12 @@ module InjectionHelper
     inject_json_ams "savedCreditCards", data, Api::CreditCardSerializer
   end
 
+  def inject_alteration
+    alteration = Alteration.find_by_working_order_id(current_order)
+    return unless alteration
+    inject_json_ams "alteration", alteration, Api::AlterationSerializer
+  end
+
   def inject_json(name, partial, opts = {})
     render partial: "json/injection", locals: {name: name, partial: partial}.merge(opts)
   end

@@ -1100,6 +1100,8 @@ en:
   cart_updating: "Updating cart..."
   cart_empty: "Cart empty"
   cart_edit: "Edit your cart"
+  cart_discard_changes: Discard changes
+  cart_save_changes: Save changes
 
   card_number: Card Number
   card_securitycode: "Security Code"

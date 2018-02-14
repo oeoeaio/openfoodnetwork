@@ -7,6 +7,8 @@ class Alteration < ActiveRecord::Base
   validates :target_order, presence: true
   validate :target_order_must_be_complete
 
+  delegate :number, to: :target_order
+
   def confirm!
     remove_missing_items
     create_or_update_items

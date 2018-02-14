@@ -1,0 +1,5 @@
+.buttons.text-right
+  %a.button.secondary.tiny{ ng: { disabled: "Cart.dirty || Cart.empty()", class: "{ dirty: Cart.dirty }", href: "{{Alteration.destroy_path}}" }, data: { method: "delete" } }
+    = "{{ Cart.dirty ? '#{t(:cart_updating)}' : (Cart.empty() ? '#{t(:cart_empty)}' : '#{t(:cart_discard_changes)}' ) }}"
+  %a.button.primary.tiny{ ng: { disabled: "Cart.dirty || Cart.empty()", href: "{{Alteration.confirm_path}}" }, data: { method: "put" } }
+    = t(:cart_save_changes)
