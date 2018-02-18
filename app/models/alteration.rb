@@ -10,20 +10,20 @@ class Alteration < ActiveRecord::Base
   delegate :number, to: :target_order
 
   def confirm!
-    remove_missing_items
-    create_or_update_items
+    transaction do
+      remove_missing_items
+      copy_items_between(working_order, target_order)
+      return true
+    end
+    false
   end
 
   private
 
   def initialize_working_order
+    return if working_order
     self.working_order = Spree::Order.create(working_attrs)
-    target_order.line_items.each do |li|
-      working_order.line_items.create(
-        variant_id: li.variant_id,
-        quantity: li.quantity
-      )
-    end
+    copy_items_between(target_order, working_order)
   end
 
   def working_attrs
@@ -51,20 +51,15 @@ class Alteration < ActiveRecord::Base
     Spree::Variant.where(id: target - working)
   end
 
-  def create_or_update_items
-    working_order.line_items.all? do |line_item|
-      create_or_update_item_from(line_item)
+  def copy_items_between(from_order, to_order)
+    from_order.line_items.each do |li|
+      scoper.scope(li.variant)
+      new_item = to_order.add_variant(li.variant, li.quantity)
+      raise ActiveRecord::Rollback unless new_item.valid?
     end
   end
 
-  def create_or_update_item_from(line_item)
-    variant_id = line_item.variant_id
-    target_item = find_or_initialize_item_for(variant_id)
-    target_item.update_attributes(line_item.attributes.slice("price", "quantity"))
-  end
-
-  def find_or_initialize_item_for(variant_id)
-    existing = target_order.line_items.find_by_variant_id(variant_id)
-    existing || target_order.line_items.new(variant_id: variant_id)
+  def scoper
+    @scoper ||= OpenFoodNetwork::ScopeVariantToHub.new(target_order.distributor)
   end
 end
