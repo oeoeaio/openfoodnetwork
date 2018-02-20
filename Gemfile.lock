@@ -23,7 +23,8 @@ GIT
 
 GIT
   remote: https://github.com/openfoodfoundation/ofn-qz.git
-  revision: 024680ccea429b2e5428d7b964fa67c52add34ec
+  revision: 1653bdbef3f928a3fe5e180cfb2a0410e7216a39
+  branch: add-homepage
   specs:
     ofn-qz (0.1.0)
       railties (~> 3.1)

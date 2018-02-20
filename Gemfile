@@ -99,7 +99,7 @@ gem 'jquery-rails'
 gem 'jquery-migrate-rails'
 gem 'css_splitter'
 
-gem 'ofn-qz', github: 'openfoodfoundation/ofn-qz'
+gem 'ofn-qz', github: 'openfoodfoundation/ofn-qz', branch: 'add-homepage'
 
 group :test, :development do
   # Pretty printed test output
