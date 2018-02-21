@@ -445,7 +445,15 @@ feature %q{
         expect(page).to have_no_selector "tr#li_#{li1.id}"
         expect(page).to have_selector "tr#li_#{li2.id}"
         expect(page).to have_selector "tr#li_#{li3.id}"
-        expect(page).to have_no_selector "tr#li_#{li4.id}"
+        # expect(page).to have_no_selector "tr#li_#{li4.id}"
+        puts "=============================================="
+        puts Time.zone.today
+        puts page.find("input#start_date_filter").value
+        puts page.find("input#end_date_filter").value
+        puts page.find("tr#li_#{li2.id} td.date").text
+        puts page.find("tr#li_#{li3.id} td.date").text
+        puts page.find("tr#li_#{li4.id} td.date").text
+        puts "=============================================="
       end
 
       it "displays only line items whose orders meet the date restriction criteria, when changed" do
