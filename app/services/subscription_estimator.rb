@@ -5,13 +5,14 @@ class SubscriptionEstimator
 
   def update!
     update_price_estimates
+    update_fee_estimates
   end
 
   private
 
   attr_accessor :subscription
 
-  delegate :subscription_line_items, :shop, to: :subscription
+  delegate :subscription_line_items, :shipping_method, :payment_method, :shop, to: :subscription
 
   def update_price_estimates
     subscription_line_items.each do |item|
@@ -36,5 +37,18 @@ class SubscriptionEstimator
 
   def scoper
     OpenFoodNetwork::ScopeVariantToHub.new(shop)
+  end
+
+  def update_fee_estimates
+    subscription.shipping_fee_estimate = shipping_fee_estimate
+    subscription.payment_fee_estimate = payment_fee_estimate
+  end
+
+  def shipping_fee_estimate
+    shipping_method.calculator.compute(subscription)
+  end
+
+  def payment_fee_estimate
+    payment_method.calculator.compute(subscription)
   end
 end
