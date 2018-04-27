@@ -1150,6 +1150,8 @@ en:
   card_has_been_removed: "Your card has been removed (number: %{number})"
   card_could_not_be_removed: Sorry, the card could not be removed
   default?: Default?
+  authorised_shops: Authorised Shops
+  authorised_shops_popover: This is a list of shops which are permitted to charge your default credit card for OFN services (eg. subscriptions). Your card details will be kept secure and will not be shared with shop owners.
 
   ie_warning_headline: "Your browser is out of date :-("
   ie_warning_text: "For the best Open Food Network experience, we strongly recommend upgrading your browser:"
