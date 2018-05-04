@@ -126,4 +126,32 @@ describe Spree.user_class do
       end
     end
   end
+
+  describe "default_card" do
+    let(:user) { create(:user) }
+
+    context "when the user has no credit cards" do
+      it "returns nil" do
+        expect(user.default_card).to be nil
+      end
+    end
+
+    context "when the user has one credit card" do
+      let!(:card) { create(:credit_card, user: user) }
+
+      it "it should be assigned as the default and be returned" do
+        expect(card.reload.is_default).to be true
+        expect(user.default_card.id).to be card.id
+      end
+    end
+
+    context "when the user has more than one card" do
+      let!(:card1) { create(:credit_card, user: user) }
+      let!(:card2) { create(:credit_card, user: user, is_default: true) }
+
+      it "it returns the card which is specified as the default" do
+        expect(user.default_card.id).to be card2.id
+      end
+    end
+  end
 end
