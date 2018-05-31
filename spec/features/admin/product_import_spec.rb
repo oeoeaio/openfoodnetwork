@@ -271,7 +271,9 @@ feature "Product Import", js: true do
 
       within 'div.import-settings' do
         find('div.header-description').click  # Import settings tab
-        check "settings_#{enterprise.id}_reset_all_absent"
+        accept_alert do
+          check "settings_#{enterprise.id}_reset_all_absent"
+        end
       end
 
       expect(page).to have_selector '.reset-count', text: "2"
@@ -304,22 +306,22 @@ feature "Product Import", js: true do
 
       within 'div.import-settings' do
         find('div.header-description').click  # Import settings tab
-        expect(page).to have_selector "#settings_#{enterprise.id}_defaults_on_hand_mode", visible: false
+        expect(page).to have_select2 "settings_#{enterprise.id}_defaults_on_hand_mode"
 
         # Overwrite stock level of all items to 9000
-        select 'Overwrite all', from: "settings_#{enterprise.id}_defaults_on_hand_mode", visible: false
+        select2_select 'Overwrite all', from: "settings_#{enterprise.id}_defaults_on_hand_mode"
         fill_in "settings_#{enterprise.id}_defaults_on_hand_value", with: '9000'
 
         # Overwrite default tax category, but only where field is empty
-        select 'Overwrite if empty', from: "settings_#{enterprise.id}_defaults_tax_category_id_mode", visible: false
-        select tax_category2.name, from: "settings_#{enterprise.id}_defaults_tax_category_id_value", visible: false
+        select2_select 'Overwrite if empty', from: "settings_#{enterprise.id}_defaults_tax_category_id_mode"
+        select2_select tax_category2.name, from: "settings_#{enterprise.id}_defaults_tax_category_id_value"
 
         # Set default shipping category (field not present in file)
-        select 'Overwrite all', from: "settings_#{enterprise.id}_defaults_shipping_category_id_mode", visible: false
-        select shipping_category.name, from: "settings_#{enterprise.id}_defaults_shipping_category_id_value", visible: false
+        select2_select 'Overwrite all', from: "settings_#{enterprise.id}_defaults_shipping_category_id_mode"
+        select2_select shipping_category.name, from: "settings_#{enterprise.id}_defaults_shipping_category_id_value"
 
         # Set available_on date
-        select 'Overwrite all', from: "settings_#{enterprise.id}_defaults_available_on_mode", visible: false
+        select2_select 'Overwrite all', from: "settings_#{enterprise.id}_defaults_available_on_mode"
         find("input#settings_#{enterprise.id}_defaults_available_on_value").set '2020-01-01'
       end
 
