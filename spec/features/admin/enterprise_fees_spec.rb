@@ -102,7 +102,9 @@ feature %q{
     expect(page).to have_content 'Enterprise Fees'
 
     # And I click delete
-    find("a.delete-resource").click
+    accept_alert do
+      find("a.delete-resource").click
+    end
 
     # Then my enterprise fee should have been deleted
     visit admin_enterprise_fees_path
@@ -122,7 +124,9 @@ feature %q{
     click_link 'Enterprise Fees'
 
     # And I click delete
-    find("a.delete-resource").click
+    accept_alert  do
+      find("a.delete-resource").click
+    end
 
     # Then I should see an error
     page.should have_content "That enterprise fee cannot be deleted as it is referenced by a product distribution: #{p.id} - #{p.name}."
