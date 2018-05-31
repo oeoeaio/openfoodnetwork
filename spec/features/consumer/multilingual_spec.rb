@@ -3,6 +3,7 @@ require 'spec_helper'
 feature 'Multilingual', js: true do
   include AuthenticationWorkflow
   include WebHelper
+  include CookieHelper
 
   it 'has two locales available' do
     expect(Rails.application.config.i18n[:default_locale]).to eq 'en'
@@ -20,14 +21,14 @@ feature 'Multilingual', js: true do
     visit root_path
     expect(get_i18n_locale).to eq 'en'
     expect(get_i18n_translation('label_shops')).to eq 'Shops'
-    expect(page.driver.browser.cookies['locale']).to be_nil
+    expect(cookie_named('locale')).to be_nil
     expect(page).to have_content 'Interested in getting on the Open Food Network?'
     expect(page).to have_content 'SHOPS'
 
     visit root_path(locale: 'es')
     expect(get_i18n_locale).to eq 'es'
     expect(get_i18n_translation('label_shops')).to eq 'Tiendas'
-    expect(page.driver.browser.cookies['locale'].value).to eq 'es'
+    expect(cookie_named('locale')[:value]).to eq 'es'
     expect(page).to have_content '¿Estás interesada en entrar en Open Food Network?'
     expect(page).to have_content 'TIENDAS'
 
@@ -35,7 +36,7 @@ feature 'Multilingual', js: true do
     visit root_path(locale: 'it')
     expect(get_i18n_locale).to eq 'es'
     expect(get_i18n_translation('label_shops')).to eq 'Tiendas'
-    expect(page.driver.browser.cookies['locale'].value).to eq 'es'
+    expect(cookie_named('locale')[:value]).to eq 'es'
     expect(page).to have_content '¿Estás interesada en entrar en Open Food Network?'
     expect(page).to have_content 'TIENDAS'
   end
@@ -46,12 +47,12 @@ feature 'Multilingual', js: true do
     it 'updates user locale from cookie if it is empty' do
       visit root_path(locale: 'es')
 
-      expect(page.driver.browser.cookies['locale'].value).to eq 'es'
+      expect(cookie_named('locale')[:value]).to eq 'es'
       expect(user.locale).to be_nil
       quick_login_as user
       visit root_path
 
-      expect(page.driver.browser.cookies['locale'].value).to eq 'es'
+      expect(cookie_named('locale')[:value]).to eq 'es'
     end
 
     it 'updates user locale and stays in cookie after logout' do
@@ -63,7 +64,7 @@ feature 'Multilingual', js: true do
 
       logout
 
-      expect(page.driver.browser.cookies['locale'].value).to eq 'es'
+      expect(cookie_named('locale')[:value]).to eq 'es'
       expect(page).to have_content '¿Estás interesada en entrar en Open Food Network?'
       expect(page).to have_content 'TIENDAS'
     end
@@ -103,7 +104,7 @@ feature 'Multilingual', js: true do
           find('li a[href="?locale=es"]').click
         end
 
-        expect(page.driver.browser.cookies['locale'].value).to eq 'es'
+        expect(cookie_named('locale')[:value]).to eq 'es'
         expect(page).to have_content 'TIENDAS'
       end
     end
