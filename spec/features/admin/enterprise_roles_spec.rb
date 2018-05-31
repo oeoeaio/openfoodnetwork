@@ -72,7 +72,9 @@ feature %q{
       page.should have_relationship u, e
 
       within("#enterprise_role_#{er.id}") do
-        find("a.delete-enterprise-role").click
+        accept_alert do
+          find("a.delete-enterprise-role").click
+        end
       end
 
       page.should_not have_relationship u, e
@@ -121,7 +123,7 @@ feature %q{
       end
 
       it "shows changes to enterprise contact or owner" do
-        select user2.email, from: 'receives_notifications_dropdown', visible: false
+        select2_select user2.email, from: 'receives_notifications_dropdown'
         within('#save-bar') { click_button 'Update' }
         within('.side_menu') { click_link 'Users' }
 
