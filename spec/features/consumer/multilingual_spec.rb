@@ -3,6 +3,7 @@ require 'spec_helper'
 feature 'Multilingual', js: true do
   include AuthenticationWorkflow
   include WebHelper
+  include UIComponentHelper
   include CookieHelper
 
   it 'has two locales available' do
@@ -71,6 +72,7 @@ feature 'Multilingual', js: true do
   end
 
   describe "using the language switcher UI" do
+    before { browse_as_large }
     context "when there is only one language available" do
       before do
         allow(ENV).to receive(:[]).and_call_original
