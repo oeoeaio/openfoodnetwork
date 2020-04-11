@@ -51,7 +51,7 @@ module OpenFoodNetwork
       @variant_scopers_by_distributor_id[distributor_id] ||=
         OpenFoodNetwork::ScopeVariantToHub.new(
           distributor_id,
-          report_variant_overrides[distributor_id]
+          report_variant_overrides(distributor_id)
         )
     end
 
@@ -100,9 +100,12 @@ module OpenFoodNetwork
       @report_line_items ||= Reports::LineItems.new(order_permissions, options)
     end
 
-    def report_variant_overrides
+    def report_variant_overrides(distributor_id)
       @report_variant_overrides ||=
-        Reports::VariantOverrides.new(order_permissions.visible_line_items).indexed
+        Reports::VariantOverrides.new(
+          line_items: order_permissions.visible_line_items,
+          distributor_id: distributor_id,
+        ).indexed
     end
   end
 end
